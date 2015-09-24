@@ -29,6 +29,8 @@ public class Formais01 {
 		//new AutomatoFinito();
 		//System.out.println(estadoteste.ordena("q2,q1"));
 		estadoteste.ordena("q2,q1,q3,q7,q9");
+		Gramatica lal = new Gramatica("Teste01.txt");
+		AutomatoFinito lol = lal.transformToAutomato();
 	}
 
 }
