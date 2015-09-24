@@ -13,7 +13,7 @@ import java.util.*;
  */
 public class AutomatoFinito {
 
-	Scanner s;
+	Scanner s; //scanner
 	File file;
 	ArrayList<Estado> es = new ArrayList<Estado>();
 
