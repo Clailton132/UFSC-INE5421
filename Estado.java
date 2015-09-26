@@ -22,9 +22,10 @@ public class Estado {
 	}
 	
 //Argumentos(Nome do estado, Número de estados)
-	public Estado(String nome, int y) {
+	public Estado(String nomeu, int y) {
 		//this.nome = nome;
 		transicoes = new String[y];
+		this.nome = nomeu;
 		
 	}
 

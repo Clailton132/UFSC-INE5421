@@ -21,6 +21,17 @@ public class AutomatoFinito {
 		file = new File("Teste 1.txt");
 		createAutomatoFromFile();
 	}
+	public AutomatoFinito(ArrayList<Estado> a) {
+		es = a;
+	}
+	public void printAutomato() {
+		for(int i = 0; i < es.size(); i ++) {
+			System.out.println(es.get(i).getNome());
+			for(int j = 0; j < es.get(i).getTransicoes().length; j ++) {
+				System.out.println(" " + es.get(i).getTransicoes()[j]);
+			}
+		}
+	}
 	public void createAutomatoFromFile(){
 		String[] a;
 		int y;
