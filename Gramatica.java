@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class Gramatica {
 	
-	String gramatica;
+	String gramatica; //teste
 	ArrayList<String> rules = new ArrayList<String>();
 	
 	public Gramatica() {
