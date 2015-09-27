@@ -8,7 +8,7 @@
  *
  * @author Luca
  */
-public class Formais01 {
+public class Formais {
 
 	private static Estado estadoteste = new Estado("q0",2);
 	public static void main(String[] args) {
