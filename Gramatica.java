@@ -13,7 +13,7 @@ import java.util.Scanner;
 public class Gramatica {
 	
 	String gramatica;
-	ArrayList<String> rules
+	ArrayList<String> rules;
 	String linguage;
 	public Gramatica() {
 		gramatica = "";
@@ -105,5 +105,22 @@ public class Gramatica {
 			}
 		return new AutomatoFinito(estados);	
 	}
-	
+	public Gramatica(AutomatoFinito af) {
+		ArrayList<Estado> estados = af.getEstados();
+		ArrayList<String> regras = new ArrayList<String>();
+
+		for(int i = 0; i < estados.size(); i++) {
+			regras.add(estados.get(i).getNome()+":");
+			String[] estadosRegras = estados.get(i).getTransicoes();
+			for(int j = 0; j < estadosRegras.length; j+=2);
+				//regras.set(i, regras.get(i) + )
+			//System.out.println(estadosRegras[j] + estadosRegras[j+1]);
+					//estadosRegras[aqui a posição da linguagem é por onde vai a transição
+			//regras.set(i, regras.get(i) + 
+
+					
+		}
+		
+		
+	}
 }//

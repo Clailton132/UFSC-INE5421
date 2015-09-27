@@ -21,7 +21,10 @@ public class AutomatoFinito {
 		estados = a;
 	}
 
-    public void AutomatoFinito(String directory) {
+    public ArrayList<Estado> getEstados() {
+    	return estados;
+    }
+    public AutomatoFinito(String directory) {
 
     	File file = new File(directory);
     	Scanner s;
