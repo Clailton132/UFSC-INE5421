@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-import java.util.Arrays;
 
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  *
@@ -12,86 +14,117 @@ import java.util.Arrays;
  */
 public class Estado {
 
-	String nome;
-	String[] transicoes;
-	boolean boolInicial = false;
-	boolean boolFinal = false;
-	
-	public Estado() {
-		
-	}
-	
-//Argumentos(Nome do estado, Número de estados)
-	public Estado(String nomeu, int y) {
-		//this.nome = nome;
-		transicoes = new String[y];
-		this.nome = nomeu;
-		
-	}
+    private String nome;
+    private String[] transicoes;
+    private boolean boolInicial = false;
+    private boolean boolFinal = false;
+    private boolean boolAlcancavel = false;
 
-	public String getNome() {
-		return nome;
-	}
+    public Estado(String nome, int y) {
+        this.nome = nome;
+        transicoes = new String[y];
+    }
 
-	public String[] getTransicoes() {
-		return transicoes;
-	}
+    public String getNome() {
+        return nome;
+    }
 
-	//Argumentos(Para onde vai, com qual condição da linguagem)
-	public void addTransicoes(String transicao, int l) {
-		int i = l - 1;
+    public String[] getTransicoes() {
+        return transicoes;
+    }
 
-		if (transicoes[i] == null) {
-			transicoes[i] = transicao;
-		} else {
-			String[] temp = transicao.split(",");
-			if (temp.length > 1) {
-				for (int k = 0; k < temp.length; k++) {
-					addTransicoes(temp[k], l);
-				}
-				return;
-			}
-			temp = transicoes[i].split(",");
-			boolean ex = false;
-			for (int j = 0; j < temp.length; j++) {
-				if (temp[j].equals(transicao)) {
-					ex = true;
-				}
-			}
+    public void addTransicoes(String transicao, int l) {
 
-			if (ex == false) {
-				transicoes[i] = transicoes[i] + "," + transicao;
-			}
-		}
-	}
+        int i = l - 1;
 
-	public boolean isInicial() {
-		return boolInicial;
-	}
+        if (transicoes[i] == null) {                                            //se nao houver a transicao por aquele simbolo l do alfabeto
 
-	public boolean isFinal() {
-		return boolFinal;
+            transicoes[i] = ordena(transicao);                                  //a transicao por o simbolo l recebe a entrada
+
+        } else {
+
+            transicoes[i] = unirTransicoes(transicoes[i], transicao);
+            
+        }
+    }
+
+    public boolean isInicial() {
+        return boolInicial;
+    }
+
+    public boolean isFinal() {
+        return boolFinal;
+    }
+
+    public boolean isAlc() {
+	    return boolAlcancavel;
 	}
 
 	public void setNome(String nome) {
-		this.nome = nome;
+        this.nome = nome;
+    }
+
+    public void setInicial() {
+        this.boolInicial = true;
+    }
+
+    public void setFinal() {
+        this.boolFinal = true;
+    }
+
+    public void setAlc() {
+	    boolAlcancavel = true;
 	}
 
-	public void setInicial() {
-		this.boolInicial = true;
-	}
+	public static String ordena(String transicao) {
+        String[] lista = transicao.split(",");
+        Arrays.sort(lista);
+        String ordenada = lista[0];
+        for (int i = 1; i < lista.length; i++) {
+            ordenada = ordenada + "," + lista[i];
+        }
+        return ordenada;
+    }
 
-	public void setFinal() {
-		this.boolFinal = true;
-	}
-	public String ordena(String transicao) {
-		transicao = transicao.replace("q", "");
-		transicao = transicao.replace(",", "");
-		char[] chars = transicao.toCharArray();
-		Arrays.sort(chars);
-		String ordenada = new String(chars);
-		ordenada = ordenada.replace("", ",q");
-		ordenada = ordenada.substring(1,ordenada.length()-2);
-		return ordenada;
-	}
+    public static String unirTransicoes(String a, String b) {
+        String[] A;
+        String[] B;
+        String[] C;
+
+        if (a != null) {
+            A = a.split(",");
+        } else {
+            A = new String[0];
+        }
+
+        if (b != null) {
+            B = b.split(",");
+        } else {
+            B = new String[0];
+        }
+
+        C = new String[A.length + B.length];
+
+        int k = 0;
+
+        for (int i = 0; i < A.length; i++, k++) {
+            C[k] = A[i];
+        }
+        for (int i = 0; i < B.length; i++, k++) {
+            C[k] = B[i];
+        }
+
+        Arrays.sort(C);
+        String ret = C[0];
+
+        for (int i = 1; i < C.length; i++) {
+            if (!C[i].equals(C[i - 1])) {
+                ret = ret + "," + C[i];
+            }
+
+        }
+        return ret;
+
+    }
+
 }
