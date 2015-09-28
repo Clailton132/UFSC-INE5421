@@ -221,10 +221,14 @@ public class AutomatoFinito {
      * Prepara o Es para determinizar... retirando as epsilon transicoes
      * 
      */
-    public void DeterminizarE() {
+    /**
+     * Método Determinizar E
+     * Prepara o Es para determinizar... retirando as epsilon transicoes
+     * 
+     */
+    public void DeterminizarE() {                                                       //atualizar no git//////////////////////////////////////////////////////////////////////////////////////
         
         ArrayList<String> A1 = new ArrayList<String>();                                 //A1 de Strings
-        ArrayList<ArrayList> A2 = new ArrayList<ArrayList>();                           //A2 é de arrayLists
        
         for(Estado e : estados){
             if(!e.getTransicoes()[0].equals("") || e.getTransicoes()[0] != null){       //se a transicao por epsilon nao for nula
@@ -232,8 +236,28 @@ public class AutomatoFinito {
                 findClosure(A1, e);                                                     //encontra todas as epsilon transicoes existentes
                 
             }
-            A2.add(A1);                                                                 //adiciona A1 em A2
-            A1.clear();                                                                 //Limpa o A1
+            
+            String[] j = new String[A1.size()];                                         //String temporario para receber os strings do array A1 criado pelas transicoes por epsilon
+            
+            
+            for(int i = 0; i < A1.size(); i++){
+                j[i] = A1.get(i);                                                       //j recebe todos os valores de A1
+            }
+            
+            Arrays.sort(j);                                                             //Sort
+
+            
+            String result = j[0];                                                       //começando pela primeira posicao do array, result = j[0]
+
+            for(int i = 0; i < j.length; i++){
+                result = Estado.unirTransicoes(result, j[i]);                           //une transicoes com o resto dos estados, ja que
+            }                                                                           //unir transicoes ja retira duplicatas e adiciona virgulas.
+            
+            
+            e.setFecho(result);                                                         //coloca no fecho do estado
+            
+            
+            A1.clear();                                                                 //limpa array A1
         }
         
     }

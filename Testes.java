@@ -1,15 +1,21 @@
 
-import java.util.ArrayList;
 
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 /**
  *
  * @author Luca
  */
-
 public class Testes {
 
     ArrayList<Estado> es = new ArrayList<Estado>();
-    ArrayList<String> ans = new ArrayList<String>();
 
     public Testes() {
         Estado i = new Estado("q0", 2);
@@ -31,13 +37,53 @@ public class Testes {
         es.add(k);
         es.add(p);
 
-        findWay(ans, i);
-
-        for (String e : ans) {
-            System.out.println(e);
+        DeterminizarE();
+        
+        for(Estado e : es){
+            System.out.println(e.getNome());
+            System.out.println(e.getFecho());
         }
+        
+        
 
     }
+    
+    public void DeterminizarE() {
+        
+        ArrayList<String> A1 = new ArrayList<String>();                                 //A1 de Strings
+       
+        for(Estado e : es){
+            if(!e.getTransicoes()[0].equals("") || e.getTransicoes()[0] != null){       //se a transicao por epsilon nao for nula
+                
+                findWay(A1, e);                                                     //encontra todas as epsilon transicoes existentes
+                
+            }
+            
+            String[] j = new String[A1.size()];
+            
+            
+            for(int i = 0; i < A1.size(); i++){
+                j[i] = A1.get(i);
+            }
+            
+            Arrays.sort(j);
+
+            
+            String result = j[0];
+
+            for(int i = 0; i < j.length; i++){
+                result = Estado.unirTransicoes(result, j[i]);
+            }
+            
+            
+            e.setFecho(result);
+            
+            
+            A1.clear();
+        }
+        
+    }
+    
 
     public void findWay(ArrayList<String> Ae, Estado in) {
 
