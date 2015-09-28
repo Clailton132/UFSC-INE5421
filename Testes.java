@@ -27,7 +27,7 @@ public class Testes {
         i.addTransicoes("q0,q1", 2);
         j.addTransicoes("q2", 1);
         j.addTransicoes("q1", 2);
-        k.addTransicoes("q0,q1,q3", 1);
+        k.addTransicoes("q3", 1);
         k.addTransicoes("q1", 2);
         p.addTransicoes("", 1);
         p.addTransicoes("q1", 2);
@@ -42,6 +42,10 @@ public class Testes {
         for(Estado e : es){
             System.out.println(e.getNome());
             System.out.println(e.getFecho());
+            
+            for(int b = 0; b < e.getTransicoes().length; b++){
+                System.out.println(b + " : " + e.getTransicoes()[b]);
+            }
         }
         
         
@@ -81,6 +85,30 @@ public class Testes {
             
             A1.clear();
         }
+        
+        for(Estado e : es){
+            for(int i = 0; i < e.getTransicoes().length; i++){
+                
+                String[] l = e.getTransicoes()[i].split(",");
+                
+                for(Estado e1 : es){
+                    for(int m = 0; m < l.length; m ++){
+                    
+                        if(e1.getNome().equals(l[m])){
+                            e.addTransicoes(e1.getFecho(), i + 1);
+                        
+                        }
+                    }
+                }
+            }
+        }
+        
+        for(Estado e : es){
+            e.retirarE();
+        }
+        
+        
+        
         
     }
     

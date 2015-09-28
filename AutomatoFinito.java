@@ -121,7 +121,7 @@ public class AutomatoFinito {
             counter = 0;
 
             if (alfa[0].equals("E")) {
-
+                DeterminizarE();
             }
 
             Determinizar();
@@ -258,6 +258,27 @@ public class AutomatoFinito {
             
             
             A1.clear();                                                                 //limpa array A1
+        }
+        
+        for(Estado e : estados){
+            for(int i = 0; i < e.getTransicoes().length; i++){
+                
+                String[] l = e.getTransicoes()[i].split(",");
+                
+                for(Estado e1 : estados){
+                    for(int m = 0; m < l.length; m ++){
+                    
+                        if(e1.getNome().equals(l[m])){
+                            e.addTransicoes(e1.getFecho(), i + 1);
+                        
+                        }
+                    }
+                }
+            }
+        }
+        
+        for(Estado e : estados){
+            e.retirarE();
         }
         
     }
