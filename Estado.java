@@ -14,17 +14,21 @@ public class Estado {
     private boolean boolInicial = false;
     private boolean boolFinal = false;
     private boolean boolAlcancavel = false;
+    private String fecho;
 
     public Estado(String nome, int y) {
         this.nome = nome;
         this.transicoes = new String[y];
     }
+    
     public String getNome() {
         return nome;
     }
+    
     public String[] getTransicoes() {
         return transicoes;
     }
+    
     /*Adiciona transicao ao estado, Argumentos(String com de qual estado a tal separado por virgula
         Exemplo "q0,q1" de q0 a q1, int de qual posição da linguagem é feita a transição, exemplo 
         linguagem L=(a,b) transoção de q0 para q1 por b. ("q0,q1",1)*/
@@ -37,27 +41,34 @@ public class Estado {
             transicoes[i] = unirTransicoes(transicoes[i], transicao);  
         }
     }
+    
     public boolean isInicial() {
         return boolInicial;
     }
+    
     public boolean isFinal() {
         return boolFinal;
     }
+    
     public boolean isAlc() {
 	    return boolAlcancavel;
 	}
 	public void setNome(String nome) {
         this.nome = nome;
     }
+        
     public void setInicial() {
         this.boolInicial = true;
     }
+    
     public void setFinal() {
         this.boolFinal = true;
     }
+    
     public void setAlc() {
 	    boolAlcancavel = true;
 	}
+    
     /*Retorna string de nome de Estado ordenada, Argumentos(String transição a ser ordenada), Exemplo:
     Entra "q3q1q2" retorna "q1q2q3"*/
 	public static String ordena(String transicao) {
@@ -69,6 +80,7 @@ public class Estado {
         }
         return ordenada;
     }
+        
     public static String unirTransicoes(String a, String b) {
         String[] A;
         String[] B;
@@ -108,6 +120,14 @@ public class Estado {
         }
         return ret;
 
+    }
+    
+    public void setFecho(String fecho){
+        this.fecho = fecho;
+    }
+    
+    public String getFecho(){
+        return this.fecho;
     }
 
 }//
