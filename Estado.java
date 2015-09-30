@@ -129,5 +129,13 @@ public class Estado {
     public String getFecho(){
         return this.fecho;
     }
+    
+    public void retirarE(){
+        String[] novo = new String[this.transicoes.length -1];
+        for(int i = 1; i < this.transicoes.length; i++){
+            novo[i-1] = this.transicoes[i];
+        }
+        this.transicoes = novo;
+    }
 
 }//
