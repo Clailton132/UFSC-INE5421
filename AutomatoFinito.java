@@ -16,6 +16,13 @@ public class AutomatoFinito {
 
     public AutomatoFinito() {
     }
+    public Estado getEstado(String state) {
+    	for(int i = 0; i < estados.size(); i ++) {
+    		if(estados.get(i).getNome().compareTo(state) == 0 )
+    			return this.estados.get(i);
+    	}
+    	return null;
+    }
     
     public AutomatoFinito(ArrayList<Estado> a) {
 		estados = a;

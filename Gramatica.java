@@ -72,6 +72,11 @@ public class Gramatica {
 		ret /= 2; //Tira as virgulas
 		return ret + 1; //Adiciona 1 pois e contado a partir do 1 e não do 0
 	}
+	public String linguagePosition(int a) {
+		String temp = linguage.substring(1,linguage.length()-1);
+		String[] linguages = temp.split(",");
+		return linguages[a]; 
+	}
 	/*Retorna o Automato Finito gerado pela propria Gramatica*/
 	public AutomatoFinito transformToAutomato() {
 		ArrayList<Estado> estados = new ArrayList<Estado>(); //Lista de todos os estados
@@ -106,13 +111,30 @@ public class Gramatica {
 		return new AutomatoFinito(estados);	
 	}
 	public Gramatica(AutomatoFinito af) {
+		this.linguage = "(a,b)";
 		ArrayList<Estado> estados = af.getEstados();
 		ArrayList<String> regras = new ArrayList<String>();
-
+		String[] teste = estados.get(0).getTransicoes();
 		for(int i = 0; i < estados.size(); i++) {
 			regras.add(estados.get(i).getNome()+":");
 			String[] estadosRegras = estados.get(i).getTransicoes();
-			for(int j = 0; j < estadosRegras.length; j+=2);
+			for(int j = 0; j < estadosRegras.length; j++) {
+				if(estadosRegras[j] != null) {
+					if(af.getEstado(estadosRegras[j]).isFinal())
+						regras.set(i, (regras.get(i) + this.linguagePosition(j) + "|"));
+					if(estadosRegras[j].compareTo("qr") != 0) {
+					if(j < estadosRegras.length-1)
+					regras.set(i, (regras.get(i) + this.linguagePosition(j) + estadosRegras[j] + "|"));
+					else 
+						regras.set(i, (regras.get(i) + this.linguagePosition(j) + estadosRegras[j]));
+					}
+					}		
+			}
+			System.out.println(regras.get(i));
+			
+
+				
+				
 				//regras.set(i, regras.get(i) + )
 			//System.out.println(estadosRegras[j] + estadosRegras[j+1]);
 					//estadosRegras[aqui a posição da linguagem é por onde vai a transição
