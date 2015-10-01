@@ -22,6 +22,10 @@ public class Testes {
         Estado j = new Estado("q1", 2);
         Estado k = new Estado("q2", 2);
         Estado p = new Estado("q3", 2);
+        
+        i.setInicial();
+        p.setFinal();
+        k.setFinal();
 
         i.addTransicoes("q1", 1);
         i.addTransicoes("q0,q1", 2);
@@ -31,25 +35,52 @@ public class Testes {
         k.addTransicoes("q1", 2);
         p.addTransicoes("", 1);
         p.addTransicoes("q1", 2);
-
+        
         es.add(i);
         es.add(j);
         es.add(k);
         es.add(p);
 
-        DeterminizarE();
+        //DeterminizarE();
+        
+        toRegex();
         
         for(Estado e : es){
             System.out.println(e.getNome());
             System.out.println(e.getFecho());
-            
+            System.out.println(e.isInicial());
+            System.out.println(e.isFinal());
             for(int b = 0; b < e.getTransicoes().length; b++){
                 System.out.println(b + " : " + e.getTransicoes()[b]);
+            }
+            for(int b = 0; b < e.getRegex().length; b++){
+                System.out.println(b + " : " + e.getRegex()[b]);
             }
         }
         
         
 
+    }
+    
+    public void toRegex() {
+
+        Estado ini = new Estado("qi",1);
+        Estado fim = new Estado("qf",1);
+        
+        for(Estado e : es){
+            if(e.isInicial()){
+                ini.addRegex(e.getNome(), "");
+            }
+            if(e.isFinal()){
+                e.addRegex("qf", "");
+            }
+        }
+        
+        es.add(ini);
+        es.add(fim);
+        
+        
+        
     }
     
     public void DeterminizarE() {

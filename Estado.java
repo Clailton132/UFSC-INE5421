@@ -15,10 +15,35 @@ public class Estado {
     private boolean boolFinal = false;
     private boolean boolAlcancavel = false;
     private String fecho;
+    private String[] regex;
 
     public Estado(String nome, int y) {
         this.nome = nome;
         this.transicoes = new String[y];
+        this.regex = new String[y];
+    }
+    
+    public String[] getRegex(){
+        return regex;
+    }
+    
+    public void addRegex(String nomeNextEstado, String tran){
+        
+        for(int i = 0; i < regex.length; i++){
+            
+            if(regex[i] == null){
+                regex[i] = nomeNextEstado + ":" + tran;
+                return;
+            }
+            
+            if(nomeNextEstado.equals(regex[i].split(":")[0])){
+                String t = unirTransicoes(regex[i].split(":")[1],tran);
+                regex[i] = nomeNextEstado + ":" + t;
+                return;
+            }
+        }
+        
+        
     }
     
     public String getNome() {

@@ -6,7 +6,6 @@ import java.util.*;
  *
  * @author Luca
  */
-
 public class AutomatoFinito {
 
     ArrayList<Estado> estados = new ArrayList<Estado>();
@@ -16,18 +15,24 @@ public class AutomatoFinito {
 
     public AutomatoFinito() {
     }
-    
+
     public AutomatoFinito(ArrayList<Estado> a) {
-		estados = a;
-	}
+        estados = a;
+    }
 
     public ArrayList<Estado> getEstados() {
-    	return estados;
+        return estados;
     }
+
+    /**
+     * Cria o automato finito baseado no arquivo de entrada
+     * @param directory 
+     */
+    
     public AutomatoFinito(String directory) {
 
-    	File file = new File(directory);
-    	Scanner s;
+        File file = new File(directory);
+        Scanner s;
         int y;
 
         try {
@@ -126,22 +131,15 @@ public class AutomatoFinito {
 
             Determinizar();
 
-            /*
-             for (Estado e : es) {
-             //System.out.println(e.getNome());
-
-             for (int i = 0; i < e.getTransicoes().length; i++) {
-             System.out.println(e.getNome() + ":" + e.getTransicoes()[i]);    //prints
-             }
-             System.out.println(e.isInicial());
-             System.out.println(e.isFinal());
-
-             }*/
+            //printAutomato();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
+    
+    /**
+     * Determiniza o automato, criando todos os estados necessários
+     */
     public void Determinizar() {
         String[] j = null;
         Estado Temp = null;
@@ -205,84 +203,87 @@ public class AutomatoFinito {
         }
 
     }
-    
-    public void printAutomato() {
-		for(int i = 0; i < estados.size(); i ++) {
-			System.out.println(estados.get(i).getNome());
-			for(int j = 0; j < estados.get(i).getTransicoes().length; j ++) {
-				System.out.println(" " + estados.get(i).getTransicoes()[j]);
-			}
-		}
-	}
-    
-    
+
     /**
-     * Método Determinizar E
-     * Prepara o Es para determinizar... retirando as epsilon transicoes
-     * 
+     * imprime o automato na tela
      */
+    public void printAutomato() {
+        for (Estado e : estados) {
+            System.out.println(e.getNome());
+
+            for (int i = 0; i < e.getTransicoes().length; i++) {
+                System.out.println(e.getNome() + ":" + e.getTransicoes()[i]);    //prints
+            }
+            System.out.println(e.isInicial());
+            System.out.println(e.isFinal());
+
+        }
+    }
+
     /**
-     * Método Determinizar E
-     * Prepara o Es para determinizar... retirando as epsilon transicoes
-     * 
+     * Método Determinizar E Prepara o Es para determinizar... retirando as
+     * epsilon transicoes
+     *
      */
     public void DeterminizarE() {                                                       //atualizar no git//////////////////////////////////////////////////////////////////////////////////////
-        
+
         ArrayList<String> A1 = new ArrayList<String>();                                 //A1 de Strings
-       
-        for(Estado e : estados){
-            if(!e.getTransicoes()[0].equals("") || e.getTransicoes()[0] != null){       //se a transicao por epsilon nao for nula
-                
+
+        for (Estado e : estados) {
+            if (!e.getTransicoes()[0].equals("") || e.getTransicoes()[0] != null) {       //se a transicao por epsilon nao for nula
+
                 findClosure(A1, e);                                                     //encontra todas as epsilon transicoes existentes
-                
+
             }
-            
+
             String[] j = new String[A1.size()];                                         //String temporario para receber os strings do array A1 criado pelas transicoes por epsilon
-            
-            
-            for(int i = 0; i < A1.size(); i++){
+
+            for (int i = 0; i < A1.size(); i++) {
                 j[i] = A1.get(i);                                                       //j recebe todos os valores de A1
             }
-            
+
             Arrays.sort(j);                                                             //Sort
 
-            
             String result = j[0];                                                       //começando pela primeira posicao do array, result = j[0]
 
-            for(int i = 0; i < j.length; i++){
+            for (int i = 0; i < j.length; i++) {
                 result = Estado.unirTransicoes(result, j[i]);                           //une transicoes com o resto dos estados, ja que
             }                                                                           //unir transicoes ja retira duplicatas e adiciona virgulas.
-            
-            
+
             e.setFecho(result);                                                         //coloca no fecho do estado
-            
-            
+
             A1.clear();                                                                 //limpa array A1
         }
-        
-        for(Estado e : estados){
-            for(int i = 0; i < e.getTransicoes().length; i++){
-                
+
+        for (Estado e : estados) {
+            for (int i = 0; i < e.getTransicoes().length; i++) {
+
                 String[] l = e.getTransicoes()[i].split(",");
-                
-                for(Estado e1 : estados){
-                    for(int m = 0; m < l.length; m ++){
-                    
-                        if(e1.getNome().equals(l[m])){
+
+                for (Estado e1 : estados) {
+                    for (int m = 0; m < l.length; m++) {
+
+                        if (e1.getNome().equals(l[m])) {
                             e.addTransicoes(e1.getFecho(), i + 1);
-                        
+
                         }
                     }
                 }
             }
         }
-        
-        for(Estado e : estados){
+
+        for (Estado e : estados) {
             e.retirarE();
         }
-        
+
     }
-    
+
+    /**
+     *
+     * @param Ae o ArrayList de todos os estados presentes
+     * @param in o estado do qual se quer o fecho épsilon Método Find Closure
+     * encontra o épsilon-fecho do estado in
+     */
     public void findClosure(ArrayList<String> Ae, Estado in) {
 
         for (String e : Ae) {
@@ -317,8 +318,13 @@ public class AutomatoFinito {
             }
         }
     }
-    
 
+    /**
+     *
+     * @param Det um ArrayList de estados
+     * @param nomeEstado o estado a ser checado
+     * @return true se estado existe no automato false se não
+     */
     public static boolean checkExists(ArrayList<Estado> Det, String nomeEstado) {      //Checa se um dado elemento ja existe no array
         for (Estado e : Det) {                                                  //para cada estado
 
@@ -330,10 +336,18 @@ public class AutomatoFinito {
         return false;                                                           //else retorna false
     }
 
-    public void inalcancavel(Estado i) {                                        //garante que só existam estados alcansáveis à fazer
-
+    /**
+     * Método toRegex transforma o Automato Finito em uma Expressão Regular
+     */
+    public void toRegex() {
+        
+        Estado ini = new Estado("qi",1);
+        Estado fim = new Estado("qf",1);
     }
 
+    /**
+     * Método Criar Arquivo imprime em um arquivo o automato finito
+     */
     public void criarArquivo() {                                                //Cria o arquivo de saida
         ArrayList<Estado> buffer = new ArrayList<Estado>();
         Estado inicial = null;
