@@ -40,7 +40,7 @@ public class AutomatoFinito {
 
             while (s.hasNext()) {                                               //enquanto houver o que ler
 
-                String temp = s.next();                                         // temp recebe a linha inteira
+                String temp = s.next() + ",";                                   // temp recebe a linha inteira
 
                 y = temp.split(",").length;                                     // int y recebe o numero de simbolos existente
                 alfa = temp.split(",");                                         // alfa[0] recebe o primeiro simbolo do alfabeto e assim por diante
@@ -97,9 +97,9 @@ public class AutomatoFinito {
                     temp = s.next();                                            //le a proxima linha
 
                 }                                                               //repete
-                //encontrou um f
+                                                                                //encontrou um f
                 temp1 = temp.split(":")[1].split(",");                          //separa no ":" [f] : [<estado>,<estado>...] e no ","
-                //[<estado>] , [<estado>]....
+                                                                                //[<estado>] , [<estado>]....
                 for (int i = 0; i < temp1.length; i++) {                        //para cada estado que voce separou dos finais
 
                     for (Estado e : estados) {
@@ -111,7 +111,7 @@ public class AutomatoFinito {
 
                 temp = s.next();                                                //le a proxima linha
                 temp1 = temp.split(":")[1].split(",");                          //separa no ":" [s] : [<estado>,<estado>...] e no ","
-                //[<estado>] , [<estado>]....
+                                                                                //[<estado>] , [<estado>]....
                 for (int i = 0; i < temp1.length; i++) {                        //para cada estado
 
                     for (Estado e : estados) {                                       //encontra
