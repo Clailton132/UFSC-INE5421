@@ -20,55 +20,38 @@ public class Testes {
         Estado i = new Estado("q0", 2);
         Estado j = new Estado("q1", 2);
         Estado k = new Estado("q2", 2);
-        Estado p = new Estado("q3", 2);
 
         i.setInicial();
-        p.setFinal();
+
         k.setFinal();
 
         i.addTransicoes("q1", 1);
         i.addTransicoes("q1", 2);
         j.addTransicoes("q2", 1);
         j.addTransicoes("q1", 2);
-        k.addTransicoes("q3", 1);
+        k.addTransicoes("q1", 1);
         k.addTransicoes("q1", 2);
-        p.addTransicoes("q1", 1);
-        p.addTransicoes("q1", 2);
 
         es.add(i);
         es.add(j);
         es.add(k);
-        es.add(p);
 
         alfa = new String[i.getTransicoes().length];
         alfa[0] = "a";
         alfa[1] = "b";
 
         //DeterminizarE();
-        toRegex();
+        System.out.println(toRegex());
 
-        
-         for (Estado e : es) {
-         System.out.println(e.getNome());
-         System.out.println(e.getFecho());
-         System.out.println(e.isInicial());
-         System.out.println(e.isFinal());
-         for (int b = 0; b < e.getTransicoes().length; b++) {
-         System.out.println(b + " : " + e.getTransicoes()[b]);
-         }
-         for (int b = 0; b < e.getRegex().length; b++) {
-         System.out.println(b + " : " + e.getRegex()[b]);
-         }
-         }
 
     }
 
-    public void toRegex() {
+    public String toRegex() {                                                     //daqui
 
         aumentarTrans(es);
 
-        Estado ini = new Estado("qi", 1);
-        Estado fim = new Estado("qf", 1);
+        Estado ini = new Estado("qi", 2);
+        Estado fim = new Estado("qf", 2);
 
         for (Estado e : es) {
             if (e.isInicial()) {
@@ -82,24 +65,97 @@ public class Testes {
         es.add(ini);
         es.add(fim);
 
-        find2Remove(ini);
+        int l = es.size();
 
+        for (int i = 0; i < l - 2; i++) {   //próxima vez usa um while
+
+            find2Remove(es.get(0));
+        }
+        
+        return ini.getRegex()[ini.getRegex().length - 1];
     }
 
     public void find2Remove(Estado e) {
-        Estado[] next = new Estado[e.getTransicoes().length];
-        Estado[] next2 = new Estado[alfa.length];
+        String retorno = "";
+        
 
-        for (int i = 0; i < e.getTransicoes().length; i++) {
-            next[i] = findEstado(e.getTransicoes()[i], es);
+        Estado[] before = antes(e, this.es);
+        Estado[] next = depois(e, this.es);
 
-            for (int j = 0; j < alfa.length; j++) {
-                next2[j] = findEstado(next[i].getTransicoes()[j], es);
-                cortarEstado(e, next[i], next2[j]);
-                break;
+
+        for (int i = 0; i < before.length; i++) {
+            for (int j = 0; j < next.length; j++) {
+                if (!e.getNome().equals("qi") && !e.getNome().equals("qf")) {
+                    cortarEstado(before[i], e, next[j]);
+                }
             }
-            break;
         }
+
+        es.remove(e);
+
+    }
+
+    public static Estado[] antes(Estado e, ArrayList<Estado> es) {
+        ArrayList<Estado> temp = new ArrayList<Estado>();
+
+        for (Estado l : es) {
+            for (int i = 0; i < l.getTransicoes().length; i++) {
+                if (l.getTransicoes()[i] != null) {
+                    if (l.getTransicoes()[i].equals(e.getNome())) {
+                        if (!AutomatoFinito.checkExists(temp, l.getNome())) {
+                            if (!l.getNome().equals(e.getNome())) {
+                                temp.add(l);
+                            }
+                        }
+                    }
+                }
+            }
+            for (int i = 0; i < l.getRegex().length; i++) {
+                if (!AutomatoFinito.checkExists(temp, l.getNome())) {
+                    if(l.getRegexS(e.getNome()).length != 0){
+                        if (!l.getNome().equals(e.getNome())) {
+                                temp.add(l);
+                            }
+                    }
+                }
+            }
+
+        }
+
+        Estado[] retorno = new Estado[temp.size()];
+
+        for (int i = 0; i < temp.size(); i++) {
+            retorno[i] = temp.get(i);
+        }
+
+        return retorno;
+
+    }
+
+    public static Estado[] depois(Estado e, ArrayList<Estado> es) {
+        ArrayList<Estado> temp = new ArrayList<Estado>();
+
+        for (Estado l : es) {
+            for (int i = 0; i < e.getTransicoes().length; i++) {
+                if (e.getTransicoes()[i] != null) {
+                    if (e.getTransicoes()[i].equals(l.getNome())) {
+                        if (!AutomatoFinito.checkExists(temp, l.getNome())) {
+                            if (!l.getNome().equals(e.getNome())) {
+                                temp.add(l);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        Estado[] retorno = new Estado[temp.size()];
+
+        for (int i = 0; i < temp.size(); i++) {
+            retorno[i] = temp.get(i);
+        }
+
+        return retorno;
 
     }
 
@@ -121,67 +177,113 @@ public class Testes {
         String R3 = "";
         String R4 = "";
 
+        
+
         for (int i = 0; i < a.getTransicoes().length; i++) {
             if (a.getTransicoes()[i] == null) {
+                
+            } else {//if (a.getTransicoes()[i].equals(b.getNome())) {
 
-            } else if (a.getTransicoes()[i].equals(b.getNome())) {
+                String[] t = a.getRegexS(b.getNome());
 
+                
                 if (R1.equals("")) {
-                    R1 = a.getRegex()[i].split(":")[1];
-
-                } else {
-                    R1 = R1 + "U " + a.getRegex()[i].split(":")[1];
+                    R1 = t[0].split(":")[1];
+                    for (int j = 1; j < t.length; j++) {
+                        if (t[j] == null) {
+                            break;
+                        }
+                        R1 = R1 + "U" + t[j].split(":")[1];
+                    }
                 }
-                R1 = "(" + R1 + ")";
             }
+            
         }
 
-        for (int i = 0; i < b.getTransicoes().length; i++) {
-            if (b.getTransicoes()[i] == null) {
+        for (int i = 0; i < b.getRegex().length; i++) {
+            if (b.getRegex()[i] == null) {
 
-            } else if (b.getTransicoes()[i].equals(b.getNome())) {
+            } else if (b.getRegex()[i].split(":")[0].equals(b.getNome())) {
+
+                String[] t = b.getRegexS(b.getNome());
+                
+                
                 if (R2.equals("")) {
-                    R2 = b.getRegex()[i].split(":")[1];
-
-                } else {
-                    R2 = R2 + "U " + b.getRegex()[i].split(":")[1];
+                    R2 = t[0].split(":")[1];
+                    for (int j = 1; j < t.length; j++) {
+                        if (t[j] == null) {
+                            break;
+                        }
+                        R2 = R2 + "U" + t[j].split(":")[1];
+                    }
                 }
                 R2 = "(" + R2 + ")*";
             }
+
         }
 
         for (int i = 0; i < b.getTransicoes().length; i++) {
             if (b.getTransicoes()[i] == null) {
 
             } else if (b.getTransicoes()[i].equals(c.getNome())) {
-                if (R3.equals("")) {
-                    R3 = b.getRegex()[i].split(":")[1];
 
-                } else {
-                    R3 = R3 + "U " + b.getRegex()[i].split(":")[1];
+                String[] t = b.getRegexS(c.getNome());
+
+                if (R3.equals("")) {
+                    R3 = t[0].split(":")[1];
+                    for (int j = 1; j < t.length; j++) {
+                        if (t[j] == null) {
+                            break;
+                        }
+                        R3 = R3 + "U" + t[j].split(":")[1];
+                    }
                 }
-                R3 = "(" + R3 + ")";
             }
+
         }
 
         for (int i = 0; i < a.getTransicoes().length; i++) {
             if (a.getTransicoes()[i] == null) {
 
             } else if (a.getTransicoes()[i].equals(c.getNome())) {
+
+                String[] t = a.getRegexS(c.getNome());
+
                 if (R4.equals("")) {
-                    R4 = a.getRegex()[i].split(":")[1];
 
-                } else {
-                    R4 = R4 + "U " + a.getRegex()[i].split(":")[1];
-
+                    R4 = t[0].split(":")[1];
+                    for (int j = 1; j < t.length; j++) {
+                        if (t[j] == null) {
+                            break;
+                        }
+                        R4 = R4 + "U" + t[j].split(":")[1];
+                    }
                 }
-                R4 = "U (" + R4 + ")";
             }
+
         }
 
-        String Regex = "(" + R1 + R2 + R3 + R4 + ")";
-        System.out.println(Regex);
+        String Regex = "";
+        if (!R1.trim().equals("")) {
+            Regex = Regex + "(" + R1 + ")";
+        }
+        if (!R2.trim().equals("")) {
+            Regex = Regex + R2;
+        }
+        if (!R3.trim().equals("")) {
+            if(!R3.trim().equals((c.getTransicoes().length )+ ""))
+            Regex = Regex + "(" + R3 + ")";
+        }
 
+        Regex = Regex + "";
+
+        if (!R4.trim().equals("")) {
+            Regex = Regex + " U " + "(" + R4 + ")";
+        }
+
+        
+        a.addRegex(c.getNome(), Regex);                                         //quando refazer só usar transiçoes
+        
     }
 
     public static Estado findEstado(String nome, ArrayList<Estado> es) {
@@ -191,7 +293,7 @@ public class Testes {
             }
         }
         return null;
-    }
+    }                                                                           // até aqui
 
     public void DeterminizarE() {
 
