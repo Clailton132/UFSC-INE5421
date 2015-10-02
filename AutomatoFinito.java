@@ -19,6 +19,19 @@ public class AutomatoFinito {
     public AutomatoFinito() {
     }
 
+    
+    public static AutomatoFinito expressaoRegularToAF() {
+    	String regex = "a.(((a+(a.b))*)+((a.b).(b.a)))*";
+    	System.out.println(regex);
+    	regex = regex.replace("+", "J");
+    	regex = regex.replace("(", "K");
+    	regex = regex.replace(")", "l");
+    	String[] test = regex.split("K");
+    	for (int i = 0; i < test.length; i ++)
+    		System.out.println(test[i]);
+    	return null;
+    	
+    }
     public Estado getEstado(String state) {
     	for(int i = 0; i < estados.size(); i ++) {
     		if(estados.get(i).getNome().compareTo(state) == 0 )

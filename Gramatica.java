@@ -28,7 +28,7 @@ public class Gramatica {
 		gramatica = "";
 		rules = new ArrayList<String>();
 		linguage = "";
-
+               
 		File file = new File(directory);
 		Scanner s;
 
@@ -56,6 +56,8 @@ public class Gramatica {
 			e.printStackTrace();
 			System.out.println("File not Found");
 		}
+                
+                 System.out.println(gramatica);
 
 	}
 
