@@ -15,7 +15,7 @@ public class AutomatoFinito {
 
     public AutomatoFinito() {
     }
-<<<<<<< HEAD
+
     public Estado getEstado(String state) {
     	for(int i = 0; i < estados.size(); i ++) {
     		if(estados.get(i).getNome().compareTo(state) == 0 )
@@ -24,9 +24,6 @@ public class AutomatoFinito {
     	return null;
     }
     
-=======
-
->>>>>>> 1653bd7a8bc8cd73804a6583f75eda4cfde4936f
     public AutomatoFinito(ArrayList<Estado> a) {
         estados = a;
     }
