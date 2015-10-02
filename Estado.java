@@ -25,6 +25,28 @@ public class Estado {
     public String[] getRegex() {
         return regex;
     }
+    
+    public void clear(int i){
+        this.transicoes[i] = "";
+    }
+    
+    public String[] getRegexS(String nome){
+        ArrayList<String> r = new ArrayList<String>();
+        for(int i = 0; i < regex.length; i++){
+            if(regex[i] == null){
+            } else
+            if(regex[i].split(":")[0].equals(nome)){
+                r.add(regex[i]);
+            }
+        }
+        
+        String[] temp = new String[r.size()];
+        for(int i = 0; i < r.size(); i++){
+            temp[i] = r.get(i);
+        }
+
+        return temp;
+    }
 
     public void addRegex(String nomeNextEstado, String tran) {
 
@@ -41,7 +63,6 @@ public class Estado {
                 return;
             }
         }
-
     }
 
     public String getNome() {
@@ -59,13 +80,13 @@ public class Estado {
         int i = l - 1;
 
         if (transicoes[i] == null) { //se nao houver a transicao por aquele simbolo l do alfabeto
-            if (!transicao.equals("-")) {
+            if (!transicao.equals("qr")) {
                 this.transicoes[i] = ordena(transicao); //a transicao por o simbolo l recebe a entrada
             } else {
                 this.transicoes[i] = "";
             }
         } else {
-            if (!transicao.equals("-") && !transicao.equals("")) {
+            if (!transicao.equals("qr") && !transicao.equals("")) {
                 if (this.transicoes[i].equals("")) {
                     this.transicoes[i] = transicao;
                 } else {
@@ -76,6 +97,9 @@ public class Estado {
         }
 
         this.regex[i] = this.transicoes[i] + ":" + i;
+        if(this.getNome().equals("qi")){
+            this.regex[i] = this.transicoes[i] + ":" + " ";
+        }
 
     }
 
