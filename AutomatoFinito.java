@@ -13,6 +13,9 @@ public class AutomatoFinito {
     int max;
     String[] alfa = null;
 
+    public String[] getAlfa() {
+    	return alfa;
+    }
     public AutomatoFinito() {
     }
 
