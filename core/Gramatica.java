@@ -1,9 +1,16 @@
+package core;
+
+import core.Estado;
+import core.AutomatoFinito;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -28,7 +35,7 @@ public class Gramatica {
 		gramatica = "";
 		rules = new ArrayList<String>();
 		linguage = "";
-
+               
 		File file = new File(directory);
 		Scanner s;
 
@@ -56,6 +63,8 @@ public class Gramatica {
 			e.printStackTrace();
 			System.out.println("File not Found");
 		}
+                
+                 
 
 	}
 
@@ -114,9 +123,10 @@ public class Gramatica {
 			// estados.add(new Estado((rules.get(i).substring(0, 1)),
 			// rules.size())); //Adicionar estado com primeiro nome da regra que
 			// é o S ou A ou B
-			estados.add(new Estado("q" + i, rules.size())); // Adicione estado q
+			estados.add(new Estado("q" + i, rules.size()-1)); // Adicione estado q
 			// + posição e.g. (0
 			// 1 2 3)
+                       // System.out.println(rules.size());
 		}
 		estados.add(new Estado("q" + rules.size(), 0)); // Adiciona estado
 		// aceitador
@@ -153,6 +163,7 @@ public class Gramatica {
 			for (int j = 0; j < rulessplit.get(i).size(); j++) {
 				// Se a opção tiver somente um tamanho, é para terminar, ir para
 				// o estado aceitador
+                           // if(rulessplit.get(i) != null) {
 				if (rulessplit.get(i).get(j).length() == 1)
 					// Crie a transição do estado atual para o aceitador
 					estados.get(i).addTransicoes("q" + i + ",q" + (estados.size() - 1),
@@ -163,7 +174,14 @@ public class Gramatica {
 							"q" + i + ",q" + this.positionState(rulessplit.get(i).get(j).substring(1)),
 							positionLanguage(rulessplit.get(i).get(j).substring(0, 1)));
 			}
-		return new AutomatoFinito(estados);
+                      //  }
+                estados.get(0).setInicial();
+                AutomatoFinito af = new AutomatoFinito(estados);
+                String temp = linguage.substring(1, linguage.length()-1);
+                String[] temp2 = temp.split(",");
+                af.setAlfa(temp2);
+                
+		return af;
 	}
 
 	public Gramatica(AutomatoFinito af) {
@@ -201,10 +219,21 @@ public class Gramatica {
 		regras.remove(regras.size() - 1);
 		this.rules = regras;
 
-		for (int i = 0; i < regras.size(); i++) {
-			System.out.println(regras.get(i));
-		}
-		System.out.println(gramatica);
+	
 	}
+        
+    public void createGramaticaFile(String directory) {
+            PrintWriter out = null;
+            try {
+                out = new PrintWriter(directory);
+                out.println(gramatica);
+                out.close();
+                } catch (FileNotFoundException ex) {
+                Logger.getLogger(Gramatica.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                out.close();
+            }
+    
+    }
 
 }//
