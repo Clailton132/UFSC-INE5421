@@ -1,3 +1,5 @@
+package core;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -80,11 +82,11 @@ public class Estado {
         int i = l - 1;
 
         if (transicoes[i] == null) { //se nao houver a transicao por aquele simbolo l do alfabeto
-            if (!transicao.equals("qr")) {
+            //if (!transicao.equals("qr")) {
                 this.transicoes[i] = ordena(transicao); //a transicao por o simbolo l recebe a entrada
-            } else {
-                this.transicoes[i] = "";
-            }
+            //} else {
+           //     this.transicoes[i] = "";
+           // }
         } else {
             if (!transicao.equals("qr") && !transicao.equals("")) {
                 if (this.transicoes[i].equals("")) {

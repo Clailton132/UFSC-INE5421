@@ -5,6 +5,9 @@
  */
 package gui;
 
+import core.*;
+import core.Gramatica;
+import core.AutomatoFinito;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.logging.Level;
@@ -25,6 +28,15 @@ public class MainWindow extends javax.swing.JFrame {
      */
     public MainWindow() {
         initComponents();
+        
+        buttonGroup1.add(jRadioButton5);
+         buttonGroup1.add(jRadioButton1);
+          buttonGroup1.add(jRadioButton2);
+           buttonGroup1.add(jRadioButton7);
+            buttonGroup1.add(jRadioButton4);
+             buttonGroup1.add(jRadioButton6);
+              
+             jRadioButton4.setEnabled(false);
     }
 
     /**
@@ -38,6 +50,7 @@ public class MainWindow extends javax.swing.JFrame {
 
         jFileChooser1 = new javax.swing.JFileChooser();
         jRadioButton3 = new javax.swing.JRadioButton();
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jButton2 = new javax.swing.JButton();
         jTextField2 = new javax.swing.JTextField();
         jTextField3 = new javax.swing.JTextField();
@@ -61,6 +74,12 @@ public class MainWindow extends javax.swing.JFrame {
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
+            }
+        });
+
+        jTextField3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField3ActionPerformed(evt);
             }
         });
 
@@ -109,43 +128,39 @@ public class MainWindow extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jRadioButton2)
-                        .addGap(18, 18, 18)
-                        .addComponent(jRadioButton7)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(jButton2))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jRadioButton5)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jRadioButton1))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jRadioButton4)
-                                .addGap(71, 71, 71)
-                                .addComponent(jRadioButton6))
                             .addComponent(jLabel1)
                             .addComponent(jLabel2)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton3)))
-                        .addGap(0, 11, Short.MAX_VALUE))))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(127, 127, 127)
-                .addComponent(jButton1)
-                .addGap(0, 0, Short.MAX_VALUE))
+                                .addComponent(jButton3))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jRadioButton5)
+                                    .addComponent(jRadioButton2)
+                                    .addComponent(jRadioButton4))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jRadioButton6)
+                                    .addComponent(jRadioButton7)
+                                    .addComponent(jRadioButton1)))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(127, 127, 127)
+                        .addComponent(jButton1)))
+                .addGap(0, 35, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(47, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -169,12 +184,12 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton3))
-                .addGap(42, 42, 42)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton1)
-                .addGap(50, 50, 50))
+                .addGap(80, 80, 80))
         );
 
-        setBounds(0, 0, 371, 428);
+        setBounds(0, 0, 395, 283);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -224,37 +239,53 @@ if(returnVal == JFileChooser.APPROVE_OPTION) {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         /*
-            5 - AFND S/E P/ AFD
-            1 - AFND C/E P/ AFD
-            2 - 6RAMATICA P/ AF
-            7 - AF P/ GRAMATICA
-            4 - ER P/ AF
-            6 - AF P/ ER
+            5 - AFND S/E P/ AFD done
+            1 - AFND C/E P/ AFD done
+            2 - 6RAMATICA P/ AF //PROBLEM
+            7 - AF P/ GRAMATICA //DONE
+            4 - ER P/ AF //NOT DONE
+            6 - AF P/ ER //DONE
         
  
         
         */
         
             if(jRadioButton1.isSelected()) {
-                
+                AutomatoFinito afnd = new AutomatoFinito(jTextField2.getText());
+                afnd.DeterminizarE();
+                afnd.criarArquivo(jTextField3.getText());
             }
             if(jRadioButton5.isSelected()) {
+                AutomatoFinito afnd = new AutomatoFinito(jTextField2.getText());
+                afnd.Determinizar();
+                afnd.criarArquivo(jTextField3.getText());
                 
             }
             if(jRadioButton2.isSelected()) {
-                
+                Gramatica a = new Gramatica(jTextField2.getText());
+                AutomatoFinito b = a.transformToAutomato();
+                b.criarArquivo(jTextField3.getText());
             }
             if(jRadioButton7.isSelected()) {
-                
+                Gramatica a;
+                AutomatoFinito b = new AutomatoFinito(jTextField2.getText());
+                a = new Gramatica(b);
+                a.createGramaticaFile(jTextField3.getText());
             }
             if(jRadioButton4.isSelected()) {
-                
+                /*NAO FEITO*/
             }
             if(jRadioButton6.isSelected()) {
-                
+                AutomatoFinito af = new AutomatoFinito(jTextField2.getText());
+                String regex = af.toRegex();
+                af.createRegexFile(regex, jTextField3.getText());
             }
             
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -293,6 +324,7 @@ if(returnVal == JFileChooser.APPROVE_OPTION) {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;

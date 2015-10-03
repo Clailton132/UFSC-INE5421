@@ -1,4 +1,8 @@
+package core;
 
+
+import core.Estado;
+import core.AutomatoFinito;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -17,6 +21,7 @@ public class Testes {
     String[] alfa;
 
     public Testes() {
+        
         Estado i = new Estado("q0", 2);
         Estado j = new Estado("q1", 2);
         Estado k = new Estado("q2", 2);
