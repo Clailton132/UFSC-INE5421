@@ -8,6 +8,6 @@ Automato Finito -> Gramática Regular DONE
 
 Gramática Regular -> Automato Finito DONE
 
-Expressão Regular -> Automato Finito ?
+Expressão Regular -> Automato Finito NOT DONE
 
-Automato Finito -> Expressão Regular ?
+Automato Finito -> Expressão Regular DONE
