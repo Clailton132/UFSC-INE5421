@@ -253,6 +253,7 @@ if(returnVal == JFileChooser.APPROVE_OPTION) {
             if(jRadioButton1.isSelected()) {
                 AutomatoFinito afnd = new AutomatoFinito(jTextField2.getText());
                 afnd.DeterminizarE();
+                System.out.println("Lol");
                 afnd.criarArquivo(jTextField3.getText());
             }
             if(jRadioButton5.isSelected()) {
