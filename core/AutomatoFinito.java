@@ -156,10 +156,12 @@ public class AutomatoFinito {
 
             max = estados.size();
             counter = 0;
+            
+            printAutomato();
 
-            if (alfa[0].equals("E")) {
-                DeterminizarE();
-            }
+            //if (alfa[0].equals("E")) {
+            //   DeterminizarE();
+            //}
 
             //Determinizar();
 
@@ -307,6 +309,8 @@ public class AutomatoFinito {
         for (Estado e : estados) {
             e.retirarE();
         }
+        
+        Determinizar();
 
     }
 

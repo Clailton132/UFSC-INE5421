@@ -19,6 +19,8 @@ public class Testes {
 
     ArrayList<Estado> es = new ArrayList<Estado>();
     String[] alfa;
+    int max;
+    int counter;
 
     public Testes() {
         
@@ -45,12 +47,143 @@ public class Testes {
         alfa[0] = "a";
         alfa[1] = "b";
 
-        //DeterminizarE();
-        System.out.println(toRegex());
+        max = es.size();
+        counter = 0;
+        
+        DeterminizarE();
+        Determinizar();
+        
+        
+        for(Estado e : es){
+            System.out.println(e.getNome());
+            System.out.println(e.isFinal());
+            System.out.println(e.isInicial());
+            
+            for(int l = 0; l < e.getTransicoes().length; l++){
+                System.out.println(e.getTransicoes()[l]);
+            }
+        }
 
 
     }
 
+    public void Determinizar() {
+        String[] j = null;
+        Estado Temp = null;
+        ArrayList<Estado> Det = new ArrayList<Estado>();
+
+        for (Estado e : es) {
+            if (e.getTransicoes() != null) {
+
+                String[] s = e.getTransicoes();                                 //s recebe as transicoes do estado atual no loop
+
+                for (int i = 0; i < s.length; i++) {                            //para i menor que o tamanho de s (numero de alfabetos)
+                    String t = Estado.ordena(s[i]);                             //ordena a entrada
+                    if (t.split(",").length > 1) {                              //se uma transicao tiver mais que um estado no nome, cria ele
+                        if (!AutomatoFinito.checkExists(es, t) && !AutomatoFinito.checkExists(Det, t)) {      //se esse estado ja existir, ignora
+                            Det.add(new Estado(t, s.length));
+                        }
+                    }
+                }
+            }
+        }
+
+        for (int k = 0; k < es.size(); k++) {                                   //Para uma quantidade de vezes igual aos estados existentes.
+
+            for (Estado e : Det) {                                              //para cada estado de Det
+                for (int i = 0; i < e.getTransicoes().length; i++) {
+                    if (e.getTransicoes()[i] == null) {                         //se este estado não possuir transicoes (eh um estado recem criado)
+                        j = e.getNome().split(",");                             //separa o nome em suas componentes <nome> -> [<estado1>],[<estado2>]
+                        Temp = e;                                               //variavel temporaria recebe o estado
+                        break;
+                    }
+                }
+            }
+
+            if (j != null) {
+                for (int t = 0; t < j.length; t++) {                                //para um t ateh o numero de estados no nome do estado
+                    for (Estado e1 : es) {                                          //para cada estado
+                        if (e1.getNome().equals(j[t])) {                            //se o nome do estado encontrado for igual a componente do nome
+                            for (int l = 0; l < e1.getTransicoes().length; l++) {   //para cada transicao desse estado encontrado
+                                String tran = Estado.ordena(e1.getTransicoes()[l]); //ordena a transicao
+                                Temp.addTransicoes(tran, l + 1);                    //pega as transicoes do estado encontrado e adiciona no outro estado
+                                if (e1.isFinal()) {                                 //se o estado componente for final
+                                    Temp.setFinal();                                //seta o novo como final
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        es.addAll(Det);                                                         //adiciona tudo no es
+        Det.clear();                                                            //limpa o det
+
+        if (counter < max - 1) {                                                //sem esse contador, ele roda em loop infinito
+            counter += 1;
+            Determinizar();
+        }
+
+        if (counter == max - 1) {                                               //se ja chegou no fim criar arquivo
+
+            //criarArquivo();
+        }
+
+    }
+    
+    public void DeterminizarE() {
+
+        ArrayList<String> A1 = new ArrayList<String>();                                 //A1 de Strings
+
+        for (Estado e : es) {
+            if (!e.getTransicoes()[0].equals("") || e.getTransicoes()[0] != null) {       //se a transicao por epsilon nao for nula
+
+                findWay(A1, e);                                                     //encontra todas as epsilon transicoes existentes
+
+            }
+
+            String[] j = new String[A1.size()];
+
+            for (int i = 0; i < A1.size(); i++) {
+                j[i] = A1.get(i);
+            }
+
+            Arrays.sort(j);
+
+            String result = j[0];
+
+            for (int i = 0; i < j.length; i++) {
+                result = Estado.unirTransicoes(result, j[i]);
+            }
+
+            e.setFecho(result);
+
+            A1.clear();
+        }
+
+        for (Estado e : es) {
+            for (int i = 0; i < e.getTransicoes().length; i++) {
+
+                String[] l = e.getTransicoes()[i].split(",");
+
+                for (Estado e1 : es) {
+                    for (int m = 0; m < l.length; m++) {
+
+                        if (e1.getNome().equals(l[m])) {
+                            e.addTransicoes(e1.getFecho(), i + 1);
+
+                        }
+                    }
+                }
+            }
+        }
+
+        for (Estado e : es) {
+            e.retirarE();
+        }
+
+    }
+    
     public String toRegex() {                                                     //daqui
 
         aumentarTrans(es);
@@ -300,58 +433,6 @@ public class Testes {
         return null;
     }                                                                           // até aqui
 
-    public void DeterminizarE() {
-
-        ArrayList<String> A1 = new ArrayList<String>();                                 //A1 de Strings
-
-        for (Estado e : es) {
-            if (!e.getTransicoes()[0].equals("") || e.getTransicoes()[0] != null) {       //se a transicao por epsilon nao for nula
-
-                findWay(A1, e);                                                     //encontra todas as epsilon transicoes existentes
-
-            }
-
-            String[] j = new String[A1.size()];
-
-            for (int i = 0; i < A1.size(); i++) {
-                j[i] = A1.get(i);
-            }
-
-            Arrays.sort(j);
-
-            String result = j[0];
-
-            for (int i = 0; i < j.length; i++) {
-                result = Estado.unirTransicoes(result, j[i]);
-            }
-
-            e.setFecho(result);
-
-            A1.clear();
-        }
-
-        for (Estado e : es) {
-            for (int i = 0; i < e.getTransicoes().length; i++) {
-
-                String[] l = e.getTransicoes()[i].split(",");
-
-                for (Estado e1 : es) {
-                    for (int m = 0; m < l.length; m++) {
-
-                        if (e1.getNome().equals(l[m])) {
-                            e.addTransicoes(e1.getFecho(), i + 1);
-
-                        }
-                    }
-                }
-            }
-        }
-
-        for (Estado e : es) {
-            e.retirarE();
-        }
-
-    }
 
     public void findWay(ArrayList<String> Ae, Estado in) {
 
