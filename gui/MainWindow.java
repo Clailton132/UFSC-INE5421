@@ -189,7 +189,7 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGap(80, 80, 80))
         );
 
-        setBounds(0, 0, 395, 283);
+        setBounds(0, 0, 395, 319);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
