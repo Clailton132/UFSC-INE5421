@@ -1,6 +1,10 @@
+package core;
+
 
 import java.io.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -11,11 +15,27 @@ public class AutomatoFinito {
     ArrayList<Estado> estados = new ArrayList<Estado>();
     int counter;
     int max;
-    String[] alfa = null;
+    String[] alfa = null; //Elementos da linguagem
 
+    public String[] getAlfa() {
+    	return alfa;
+    }
     public AutomatoFinito() {
     }
 
+    public void setAlfa(String[] a) {
+        this.alfa = a;
+        
+    }
+
+    public Estado getEstado(String state) {
+    	for(int i = 0; i < estados.size(); i ++) {
+    		if(estados.get(i).getNome().compareTo(state) == 0 )
+    			return this.estados.get(i);
+    	}
+    	return null;
+    }
+    
     public AutomatoFinito(ArrayList<Estado> a) {
         estados = a;
     }
@@ -28,7 +48,6 @@ public class AutomatoFinito {
      * Cria o automato finito baseado no arquivo de entrada
      * @param directory 
      */
-    
     public AutomatoFinito(String directory) {
 
         File file = new File(directory);
@@ -124,12 +143,14 @@ public class AutomatoFinito {
 
             max = estados.size();
             counter = 0;
+            
+            printAutomato();
 
-            if (alfa[0].equals("E")) {
-                DeterminizarE();
-            }
+            //if (alfa[0].equals("E")) {
+            //   DeterminizarE();
+            //}
 
-            Determinizar();
+            //Determinizar();
 
             //printAutomato();
         } catch (Exception e) {
@@ -199,7 +220,7 @@ public class AutomatoFinito {
 
         if (counter == max - 1) {                                               //se ja chegou no fim criar arquivo
 
-            criarArquivo();
+            //criarArquivo();
         }
 
     }
@@ -225,7 +246,7 @@ public class AutomatoFinito {
      * epsilon transicoes
      *
      */
-    public void DeterminizarE() {                                                       //atualizar no git//////////////////////////////////////////////////////////////////////////////////////
+    public void DeterminizarE() {                                                   
 
         ArrayList<String> A1 = new ArrayList<String>();                                 //A1 de Strings
 
@@ -275,6 +296,8 @@ public class AutomatoFinito {
         for (Estado e : estados) {
             e.retirarE();
         }
+        
+        Determinizar();
 
     }
 
@@ -339,22 +362,20 @@ public class AutomatoFinito {
     /**
      * Método toRegex transforma o Automato Finito em uma Expressão Regular
      */
-    public void toRegex() {
-        
-        Estado ini = new Estado("qi",1);
-        Estado fim = new Estado("qf",1);
-    }
-
     /**
      * Método Criar Arquivo imprime em um arquivo o automato finito
      */
-    public void criarArquivo() {                                                //Cria o arquivo de saida
+    public void criarArquivo(String directory) {                                                //Cria o arquivo de saida
         ArrayList<Estado> buffer = new ArrayList<Estado>();
         Estado inicial = null;
 
-        try {                                                                   //Tente
-            File file = new File("C:\\Programations\\Exemplo\\Resposta 2.txt"); //crie um arquivo de resposta novo
+        try { 
+            //Tente
+            
+            File file = new File(directory);
+            //File file = new File("C:\\Programations\\Exemplo\\Resposta 2.txt"); //crie um arquivo de resposta novo
             PrintWriter writer = new PrintWriter(file, "UTF-8");                //cria um printer
+            
 
             writer.print(alfa[0]);
 
@@ -399,6 +420,315 @@ public class AutomatoFinito {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        
+    }       
+
+/*
+Cria arquivo com a expressão regular
+@param regex A string com a expressão regular
+@param directory onde deve ser salvo
+*/
+    public void createRegexFile(String regex, String directory) {
+        PrintWriter out = null;
+            try {
+                //ArrayList<Estado> buffer = new ArrayList<Estado>();
+                // Estado inicial = null;
+                out = new PrintWriter(directory);
+                out.println(regex);
+                out.close();
+              } catch (FileNotFoundException ex) {
+                Logger.getLogger(Gramatica.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                out.close();
+            }
     }
 
-}
+/*
+Transforma o proprio automato finito em Expressão Regular e retorna a String com a expressão regular
+*/       
+public String toRegex() {
+        aumentarTrans(estados);
+
+        Estado ini = new Estado("qi", 2);
+        Estado fim = new Estado("qf", 2);
+
+        for (Estado e : estados) {
+            if (e.isInicial()) {
+                ini.addTransicoes(e.getNome(), ini.getTransicoes().length);
+            }
+            if (e.isFinal()) {
+                e.addTransicoes("qf", e.getTransicoes().length);
+            }
+        }
+
+        estados.add(ini);
+        estados.add(fim);
+
+        int l = estados.size();
+
+        for (int i = 0; i < l - 2; i++) {   //próxima vez usa um while
+
+            find2Remove(estados.get(0));
+        }
+        
+        return ini.getRegex()[ini.getRegex().length - 1];
+    }
+
+    public void find2Remove(Estado e) {
+        String retorno = "";
+        
+
+        Estado[] before = antes(e, this.estados);
+        Estado[] next = depois(e, this.estados);
+
+
+        for (int i = 0; i < before.length; i++) {
+            for (int j = 0; j < next.length; j++) {
+                if (!e.getNome().equals("qi") && !e.getNome().equals("qf")) {
+                    cortarEstado(before[i], e, next[j]);
+                }
+            }
+        }
+
+        estados.remove(e);
+
+    }
+
+    public static Estado[] antes(Estado e, ArrayList<Estado> es) {
+        ArrayList<Estado> temp = new ArrayList<Estado>();
+
+        for (Estado l : es) {
+            for (int i = 0; i < l.getTransicoes().length; i++) {
+                if (l.getTransicoes()[i] != null) {
+                    if (l.getTransicoes()[i].equals(e.getNome())) {
+                        if (!AutomatoFinito.checkExists(temp, l.getNome())) {
+                            if (!l.getNome().equals(e.getNome())) {
+                                temp.add(l);
+                            }
+                        }
+                    }
+                }
+            }
+            for (int i = 0; i < l.getRegex().length; i++) {
+                if (!AutomatoFinito.checkExists(temp, l.getNome())) {
+                    if(l.getRegexS(e.getNome()).length != 0){
+                        if (!l.getNome().equals(e.getNome())) {
+                                temp.add(l);
+                            }
+                    }
+                }
+            }
+
+        }
+
+        Estado[] retorno = new Estado[temp.size()];
+
+        for (int i = 0; i < temp.size(); i++) {
+            retorno[i] = temp.get(i);
+        }
+
+        return retorno;
+
+    }
+
+    public static Estado[] depois(Estado e, ArrayList<Estado> es) {
+        ArrayList<Estado> temp = new ArrayList<Estado>();
+
+        for (Estado l : es) {
+            for (int i = 0; i < e.getTransicoes().length; i++) {
+                if (e.getTransicoes()[i] != null) {
+                    if (e.getTransicoes()[i].equals(l.getNome())) {
+                        if (!AutomatoFinito.checkExists(temp, l.getNome())) {
+                            if (!l.getNome().equals(e.getNome())) {
+                                temp.add(l);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        Estado[] retorno = new Estado[temp.size()];
+
+        for (int i = 0; i < temp.size(); i++) {
+            retorno[i] = temp.get(i);
+        }
+
+        return retorno;
+
+    }
+
+    public static void aumentarTrans(ArrayList<Estado> es) {
+        for (Estado e : es) {
+            String[] temp = e.getTransicoes();
+            e.blowT(new String[temp.length + 1]);
+
+            for (int i = 1; i < temp.length + 1; i++) {
+                e.addTransicoes(temp[i - 1], i);
+            }
+
+        }
+    }
+
+    public void cortarEstado(Estado a, Estado b, Estado c) {
+        String R1 = "";
+        String R2 = "";
+        String R3 = "";
+        String R4 = "";
+
+        
+
+        for (int i = 0; i < a.getTransicoes().length; i++) {
+            if (a.getTransicoes()[i] == null) {
+                
+            } else {//if (a.getTransicoes()[i].equals(b.getNome())) {
+
+                String[] t = a.getRegexS(b.getNome());
+
+                
+                if (R1.equals("")) {
+                    R1 = t[0].split(":")[1];
+                    for (int j = 1; j < t.length; j++) {
+                        if (t[j] == null) {
+                            break;
+                        }
+                        R1 = R1 + "U" + t[j].split(":")[1];
+                    }
+                }
+            }
+            
+        }
+
+        for (int i = 0; i < b.getRegex().length; i++) {
+            if (b.getRegex()[i] == null) {
+
+            } else if (b.getRegex()[i].split(":")[0].equals(b.getNome())) {
+
+                String[] t = b.getRegexS(b.getNome());
+                
+                
+                if (R2.equals("")) {
+                    R2 = t[0].split(":")[1];
+                    for (int j = 1; j < t.length; j++) {
+                        if (t[j] == null) {
+                            break;
+                        }
+                        R2 = R2 + "U" + t[j].split(":")[1];
+                    }
+                }
+                R2 = "(" + R2 + ")*";
+            }
+
+        }
+
+        for (int i = 0; i < b.getTransicoes().length; i++) {
+            if (b.getTransicoes()[i] == null) {
+
+            } else if (b.getTransicoes()[i].equals(c.getNome())) {
+
+                String[] t = b.getRegexS(c.getNome());
+
+                if (R3.equals("")) {
+                    R3 = t[0].split(":")[1];
+                    for (int j = 1; j < t.length; j++) {
+                        if (t[j] == null) {
+                            break;
+                        }
+                        R3 = R3 + "U" + t[j].split(":")[1];
+                    }
+                }
+            }
+
+        }
+
+        for (int i = 0; i < a.getTransicoes().length; i++) {
+            if (a.getTransicoes()[i] == null) {
+
+            } else if (a.getTransicoes()[i].equals(c.getNome())) {
+
+                String[] t = a.getRegexS(c.getNome());
+
+                if (R4.equals("")) {
+
+                    R4 = t[0].split(":")[1];
+                    for (int j = 1; j < t.length; j++) {
+                        if (t[j] == null) {
+                            break;
+                        }
+                        R4 = R4 + "U" + t[j].split(":")[1];
+                    }
+                }
+            }
+
+        }
+
+        String Regex = "";
+        if (!R1.trim().equals("")) {
+            Regex = Regex + "(" + R1 + ")";
+        }
+        if (!R2.trim().equals("")) {
+            Regex = Regex + R2;
+        }
+        if (!R3.trim().equals("")) {
+            if(!R3.trim().equals((c.getTransicoes().length )+ ""))
+            Regex = Regex + "(" + R3 + ")";
+        }
+
+        Regex = Regex + "";
+
+        if (!R4.trim().equals("")) {
+            Regex = Regex + " U " + "(" + R4 + ")";
+        }
+
+        
+        a.addRegex(c.getNome(), Regex);                                         //quando refazer só usar transiçoes
+        
+    }
+
+    public static Estado findEstado(String nome, ArrayList<Estado> es) {
+        for (Estado e : es) {
+            if (e.getNome().equals(nome)) {
+                return e;
+            }
+        }
+        return null;
+    }                                                                           // até aqui
+
+
+    public void findWay(ArrayList<String> Ae, Estado in) {
+
+        for (String e : Ae) {
+            if (in.getNome().equals(e)) {
+                return;
+            }
+        }
+
+        Ae.add(in.getNome());
+
+        String[] temp = in.getTransicoes();
+
+        if (temp[0].split(",").length > 1) {
+
+            for (Estado e : estados) {
+
+                for (int l = 0; l < temp[0].split(",").length; l++) {
+
+                    if (e.getNome().equals(temp[0].split(",")[l])) {
+
+                        findWay(Ae, e);
+
+                    }
+                }
+            }
+        } else {
+
+            for (Estado e : estados) {
+                if (e.getNome().equals(temp[0])) {
+                    findWay(Ae, e);
+                }
+            }
+        }
+    }
+}//
+
+
