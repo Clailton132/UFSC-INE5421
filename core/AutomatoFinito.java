@@ -15,7 +15,7 @@ public class AutomatoFinito {
     ArrayList<Estado> estados = new ArrayList<Estado>();
     int counter;
     int max;
-    String[] alfa = null;
+    String[] alfa = null; //Elementos da linguagem
 
     public String[] getAlfa() {
     	return alfa;
@@ -27,19 +27,7 @@ public class AutomatoFinito {
         this.alfa = a;
         
     }
-    
-    public static AutomatoFinito expressaoRegularToAF() {
-    	String regex = "a.(((a+(a.b))*)+((a.b).(b.a)))*";
-    	System.out.println(regex);
-    	regex = regex.replace("+", "J");
-    	regex = regex.replace("(", "K");
-    	regex = regex.replace(")", "l");
-    	String[] test = regex.split("K");
-    	for (int i = 0; i < test.length; i ++)
-    		System.out.println(test[i]);
-    	return null;
-    	
-    }
+
     public Estado getEstado(String state) {
     	for(int i = 0; i < estados.size(); i ++) {
     		if(estados.get(i).getNome().compareTo(state) == 0 )
@@ -60,7 +48,6 @@ public class AutomatoFinito {
      * Cria o automato finito baseado no arquivo de entrada
      * @param directory 
      */
-    
     public AutomatoFinito(String directory) {
 
         File file = new File(directory);
@@ -257,7 +244,7 @@ public class AutomatoFinito {
      * epsilon transicoes
      *
      */
-    public void DeterminizarE() {                                                       //atualizar no git//////////////////////////////////////////////////////////////////////////////////////
+    public void DeterminizarE() {                                                   
 
         ArrayList<String> A1 = new ArrayList<String>();                                 //A1 de Strings
 
@@ -432,6 +419,11 @@ public class AutomatoFinito {
         
     }       
 
+/*
+Cria arquivo com a expressão regular
+@param regex A string com a expressão regular
+@param directory onde deve ser salvo
+*/
     public void createRegexFile(String regex, String directory) {
         PrintWriter out = null;
             try {
@@ -446,7 +438,10 @@ public class AutomatoFinito {
                 out.close();
             }
     }
-       
+
+/*
+Transforma o proprio automato finito em Expressão Regular e retorna a String com a expressão regular
+*/       
 public String toRegex() {
         aumentarTrans(estados);
 

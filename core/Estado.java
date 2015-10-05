@@ -17,7 +17,10 @@ public class Estado {
     private boolean boolAlcancavel = false;
     private String fecho;
     private String[] regex;
-
+/*
+@param nome Nome do estado
+@param y Transições que o estado pode fazer
+*/
     public Estado(String nome, int y) {
         this.nome = nome;
         this.transicoes = new String[y];

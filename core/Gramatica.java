@@ -19,9 +19,9 @@ import java.util.logging.Logger;
 
 public class Gramatica {
 
-	String gramatica;
-	ArrayList<String> rules;
-	String linguage;
+	String gramatica; //Gramatica inteira
+	ArrayList<String> rules; //Regras separadas
+	String linguage; //Linguagem da gramatica (a,b) por exemplo
 
 	public Gramatica() {
 		gramatica = "";
@@ -30,6 +30,7 @@ public class Gramatica {
 	/*
 	 * Cria gramática vindo de arquivo, Argumentos(Directório do arquivo com a
 	 * gramática
+	@param directory diretorio onde está a gramática
 	 */
 	public Gramatica(String directory) {
 		gramatica = "";
@@ -69,8 +70,8 @@ public class Gramatica {
 	}
 
 	/*
-	 * Qual é a posição da regra na lista de regras, Argumentos(String nome da
-	 * regra)
+	 * Qual é a posição da regra na lista de regras, 
+	@param stat String nome da regra)
 	 */
 	public int positionState(String stat) {
 		String rulestates = ""; // String para manipular
@@ -108,6 +109,7 @@ public class Gramatica {
 		return ret + 1; // Adiciona 1 pois e contado a partir do 1 e não do 0
 	}
 
+	/*Retorna posição da linguagem por exemplo (a,b) se eu mandar a retorna 0, se mandar b retorna 1*/
 	public String linguagePosition(int a) {
 		String temp = linguage.substring(1, linguage.length() - 1);
 		String[] linguages = temp.split(",");
@@ -184,6 +186,8 @@ public class Gramatica {
 		return af;
 	}
 
+/*Cria uma gramatica a partir de um AutomatoFinito
+@param af Automatofinito para transformar para gramática*/
 	public Gramatica(AutomatoFinito af) {
 		this.gramatica = "";
 		String[] alfa = af.getAlfa();
@@ -221,7 +225,8 @@ public class Gramatica {
 
 	
 	}
-        
+/*Cria arquivo de saída com a gramática
+@param directory diretório e arquivo a qual deve ser escrito*/
     public void createGramaticaFile(String directory) {
             PrintWriter out = null;
             try {
