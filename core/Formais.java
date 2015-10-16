@@ -11,7 +11,7 @@ import gui.MainWindow;
 public class Formais {
 
 	public static void main(String[] args) {
-            new MainWindow().setVisible(true);
+            //new MainWindow().setVisible(true);
             //new Testes();
 	}
 }//
