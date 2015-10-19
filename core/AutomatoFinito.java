@@ -446,6 +446,9 @@ Cria arquivo com a expressão regular
 /*
 Transforma o proprio automato finito em Expressão Regular e retorna a String com a expressão regular
 */       
+
+
+//HELLO EVERYBODY
 public String toRegex() {
         aumentarTrans(estados);
 
