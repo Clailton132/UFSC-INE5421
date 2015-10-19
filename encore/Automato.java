@@ -59,7 +59,6 @@ public class Automato {
             while (!t.startsWith("f:")) {
                 String[] temp = t.split(";");
                 Estado e = getEstado(temp[0]);
-                System.out.println(e.getNome());
 
                 for (int i = 1; i < temp.length; i++) {
                     String r = temp[i];
@@ -78,7 +77,7 @@ public class Automato {
 
             }
 
-            System.out.println("");
+
             //print();
 
         } catch (Exception e) {
@@ -92,6 +91,7 @@ public class Automato {
         for (int i = 1; i < alfabeto.length; i++) {
             System.out.print("," + alfabeto[i]);
         }
+        System.out.println("");
         System.out.println("");
 
         for (Estado e : estados) {

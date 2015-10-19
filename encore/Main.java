@@ -17,6 +17,8 @@ public class Main {
     public static void main(String[] args) {
         Automato a1 = new Automato("C:\\Programations\\Exemplo\\Teste 1.txt");
         Determinizador.Determinizar(a1);
+        a1.print();
+        //Determinizador.prepararEpsilons(a1.getEstados());
     }
     
 }

@@ -18,11 +18,13 @@ public class Estado {
     private Automato automato;
     private boolean aceitador = false;
     private boolean inicial = false;
+    private ArrayList<Estado> fecho;
 
     public Estado(Automato auto, String Nome, int numAlfa) {
         this.nome = Nome;
         this.automato = auto;
         this.transicoes = new ArrayList[numAlfa];
+        this.fecho = new ArrayList<Estado>();
 
         for (int i = 0; i < transicoes.length; i++) {
             transicoes[i] = new ArrayList<Estado>();
@@ -38,6 +40,7 @@ public class Estado {
                 i++;
             }
             this.transicoes[i].add(estado);
+            this.transicoes[i].sort(Comparador);
         }
     }
 
@@ -45,6 +48,7 @@ public class Estado {
         if (estado != null) {
             if (!Determinizador.checkIfExistsInArray(transicoes[indice], estado)) {
                 this.transicoes[indice].add(estado);
+                this.transicoes[indice].sort(Comparador);
             }
         }
     }
@@ -75,7 +79,9 @@ public class Estado {
         for (Estado estado : temp) {
 
             for (int t = 0; t < estado.getTransicoes().length; t++) {
-                e.addTransicaoPorIndice(estado.getTransicaoPorIndice(t).get(0), t);
+                for (int j = 0; j < estado.getTransicaoPorIndice(t).size(); j++) {
+                    e.addTransicaoPorIndice(estado.getTransicaoPorIndice(t).get(j), t);
+                }
             }
 
             if (estado.getFinal()) {
@@ -95,6 +101,14 @@ public class Estado {
             result = result + "," + temp[i];
         }
         return result;
+    }
+
+    public void setFecho(ArrayList<Estado> fecho) {
+        this.fecho = fecho;
+    }
+
+    public ArrayList<Estado> getFecho() {
+        return this.fecho;
     }
 
     public void setInicial() {
@@ -120,4 +134,22 @@ public class Estado {
     public Automato getAutomatoPertence() {
         return this.automato;
     }
+
+    public void clearEpsilon() {
+        this.transicoes[0].clear();
+    }
+
+    public static Comparator<Estado> Comparador = new Comparator<Estado>() {
+
+        @Override
+        public int compare(Estado o1, Estado o2) {
+            String nome1 = o1.getNome();
+            String nome2 = o2.getNome();
+
+            return nome1.compareTo(nome2);
+
+        }
+
+    };
+
 }
