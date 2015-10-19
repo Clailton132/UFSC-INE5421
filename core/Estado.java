@@ -26,6 +26,10 @@ public class Estado {
         this.transicoes = new String[y];
         this.regex = new String[y * y];
     }
+    
+    public void rename(String nome){
+        this.nome = nome;
+    }
 
     public String[] getRegex() {
         return regex;
@@ -138,6 +142,10 @@ public class Estado {
 
     public void setAlc() {
         boolAlcancavel = true;
+    }
+    
+    public void desetInicial(){
+        this.boolInicial = false;
     }
 
     /*Retorna string de nome de Estado ordenada, Argumentos(String transição a ser ordenada), Exemplo:

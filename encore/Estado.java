@@ -85,11 +85,31 @@ public class Estado {
             }
 
             if (estado.getFinal()) {
-                e.setFinal();
+                e.setFinal(true);
             }
         }
         this.transicoes[i].clear();
         this.transicoes[i].add(e);
+    }
+
+    public void acertarTransicoes(Estado e) {
+        for (int i = 0; i < transicoes.length; i++) {
+
+            ArrayList<Estado> temp = this.transicoes[i];
+            if (temp.size() != 0) {
+                String nome = temp.get(0).getNome();
+                
+                for (int j = 1; j < temp.size(); j++) {
+                    nome = nome + "," + temp.get(j).getNome();
+                }
+                
+                if(e.getNome().equals(nome)){
+                    this.transicoes[i].clear();
+                    this.transicoes[i].add(e);
+                }
+            }
+        }
+
     }
 
     public static String OrdenaString(String a) {
@@ -111,12 +131,12 @@ public class Estado {
         return this.fecho;
     }
 
-    public void setInicial() {
-        this.inicial = true;
+    public void setInicial(boolean i) {
+        this.inicial = i;
     }
 
-    public void setFinal() {
-        this.aceitador = true;
+    public void setFinal(boolean f) {
+        this.aceitador = f;
     }
 
     public boolean getInicial() {
@@ -137,6 +157,10 @@ public class Estado {
 
     public void clearEpsilon() {
         this.transicoes[0].clear();
+    }
+
+    public void rename(String nome) {
+        this.nome = nome;
     }
 
     public static Comparator<Estado> Comparador = new Comparator<Estado>() {

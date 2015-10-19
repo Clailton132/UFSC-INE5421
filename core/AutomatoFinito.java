@@ -20,8 +20,7 @@ public class AutomatoFinito {
     public String[] getAlfa() {
     	return alfa;
     }
-    public AutomatoFinito() {
-    }
+
 
     public void setAlfa(String[] a) {
         this.alfa = a;
@@ -37,7 +36,8 @@ public class AutomatoFinito {
     }
     
     public AutomatoFinito(ArrayList<Estado> a) {
-        estados = a;
+        this.estados = a;
+        max = estados.size();
     }
 
     public ArrayList<Estado> getEstados() {
@@ -251,7 +251,7 @@ public class AutomatoFinito {
         ArrayList<String> A1 = new ArrayList<String>();                                 //A1 de Strings
 
         for (Estado e : estados) {
-            if (!e.getTransicoes()[0].equals("") || e.getTransicoes()[0] != null) {       //se a transicao por epsilon nao for nula
+            if (e.getTransicoes()[0] != null || !e.getTransicoes()[0].equals("") ) {       //se a transicao por epsilon nao for nula
 
                 findClosure(A1, e);                                                     //encontra todas as epsilon transicoes existentes
 

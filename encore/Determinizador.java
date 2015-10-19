@@ -62,6 +62,12 @@ public class Determinizador {
             Determinizar(automato);
         }
 
+        for (Estado e : automato.getEstados()) {
+            for (Estado j : novosEstados) {
+                e.acertarTransicoes(j);
+            }
+        }
+
     }
 
     public static boolean checkIfExistsInArray(ArrayList<Estado> estados, Estado estado) {

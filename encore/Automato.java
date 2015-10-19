@@ -7,6 +7,7 @@ package encore;
 
 import java.util.*;
 import java.io.File;
+import java.io.PrintWriter;
 
 /**
  *
@@ -16,6 +17,10 @@ public class Automato {
 
     private ArrayList<Estado> estados = new ArrayList<Estado>();
     private String[] alfabeto;
+
+    public Automato() {
+
+    }
 
     public Automato(String Arquivo) {
 
@@ -36,7 +41,7 @@ public class Automato {
             for (String s : t.split(":")[1].split(",")) {
                 for (Estado e : estados) {
                     if (e.getNome().equals(s)) {
-                        e.setFinal();
+                        e.setFinal(true);
                     }
                 }
             }
@@ -46,7 +51,7 @@ public class Automato {
             for (String s : t.split(":")[1].split(",")) {
                 for (Estado e : estados) {
                     if (e.getNome().equals(s)) {
-                        e.setInicial();
+                        e.setInicial(true);
                     }
                 }
             }
@@ -77,13 +82,16 @@ public class Automato {
 
             }
 
-
             //print();
-
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+    }
+
+    public Automato(ArrayList<Estado> estados, String[] alfa) {
+        this.estados = estados;
+        this.alfabeto = alfa;
     }
 
     public void print() {
@@ -104,9 +112,11 @@ public class Automato {
                 if (l.size() != 0) {
                     System.out.print(l.get(0).getNome());
                 }
+                //*
                 for (int i = 1; i < l.size(); i++) {
                     System.out.print("," + l.get(i).getNome());
                 }
+                //*/
                 System.out.println("");
             }
             System.out.println(e.getInicial());
@@ -143,6 +153,74 @@ public class Automato {
 
     public void addEstados(Estado r) {
         estados.add(r);
+    }
+
+    public void setAlfa(String[] alfa) {
+        this.alfabeto = alfa;
+    }
+
+    public void criarArquivo(String diretorio) {
+
+        ArrayList<Estado> buffer = new ArrayList<Estado>();
+        String inicial = "";
+
+        try {
+            File file = new File(diretorio);
+            PrintWriter writer = new PrintWriter(file);
+
+            writer.print(alfabeto[0]);
+
+            for (int i = 1; i < alfabeto.length; i++) {
+                writer.print("," + alfabeto[i]);
+            }
+
+            writer.println("");
+
+            for (Estado e : estados) {
+                
+                writer.print(e.getNome());
+
+                for (int i = 0; i < e.getTransicoes().length; i++) {
+                    writer.print(";");
+
+                    if (e.getTransicaoPorIndice(i).size() != 0) {
+                        writer.print(e.getTransicaoPorIndice(i).get(0).getNome());
+                    }
+                    
+                    if (e.getTransicaoPorIndice(i).size() > 1) {
+
+                        for (int j = 1; j < e.getTransicaoPorIndice(i).size(); j++) {
+                            writer.print("," + e.getTransicaoPorIndice(i).get(j).getNome());
+                        }
+                    }
+
+                }
+                
+                if (e.getInicial()) {
+                    inicial = e.getNome();
+                }
+                
+                if (e.getFinal()) {
+                    buffer.add(e);
+                }
+                writer.println("");
+            }
+
+            writer.print("f:" + buffer.get(0).getNome());
+
+            for (int i = 1; i < buffer.size(); i++) {
+                writer.print(";" + buffer.get(i).getNome());
+            }
+
+            writer.println("");
+            writer.print("i:" + inicial);
+
+            writer.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
 }
