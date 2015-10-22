@@ -21,15 +21,15 @@ public class Determinizador {
 
         estados = automato.getEstados();
         last = automato.getEstados();
-        alfabeto = automato.getAlfa();
+        alfabeto = automato.getAlfabeto();
 
         if (alfabeto[0].equals("E")) {
-            prepararEpsilons(estados);
+            removerEpsilonTransicoes(estados);
         }
 
         for (Estado e : estados) {
 
-            //como a transição por epsilon é sempre na posicao 0, da pra começar com 1 aqui
+            //como a transicao por epsilon eh sempre na posicao 0, da pra comecar com 1 aqui
             for (int i = 0; i < e.getTransicoes().length; i++) {
                 ArrayList<Estado> temp = e.getTransicaoPorIndice(i);
                 String novo = "";
@@ -47,7 +47,7 @@ public class Determinizador {
                     Estado novoEstado = new Estado(automato, novo, alfabeto.length);
                     e.determinizarTransicao(i, novoEstado);
 
-                    if (!checkIfExistsInArray(novosEstados, novoEstado)) {
+                    if (!checaSeExisteNoArray(novosEstados, novoEstado)) {
                         novosEstados.add(novoEstado);
                     }
                 }
@@ -70,7 +70,7 @@ public class Determinizador {
 
     }
 
-    public static boolean checkIfExistsInArray(ArrayList<Estado> estados, Estado estado) {
+    public static boolean checaSeExisteNoArray(ArrayList<Estado> estados, Estado estado) {
         for (Estado e : estados) {
             if (estado.getNome().equals(e.getNome())) {
                 return true;
@@ -79,10 +79,10 @@ public class Determinizador {
         return false;
     }
 
-    //nota, padrão Epsilon estar sempre na posição 0; pode ser mudado depois
+    //nota, padrao Epsilon estar sempre na posicao 0; pode ser mudado depois
     private static ArrayList<Estado> EpsilonFechoDoEstado(Estado estado, ArrayList<Estado> estados, ArrayList<Estado> fecho) {
 
-        if (checkIfExistsInArray(fecho, estado)) {
+        if (checaSeExisteNoArray(fecho, estado)) {
             return fecho;
         }
 
@@ -99,7 +99,7 @@ public class Determinizador {
 
     }
 
-    public static void prepararEpsilons(ArrayList<Estado> estados) {
+    public static void removerEpsilonTransicoes(ArrayList<Estado> estados) {
 
         for (Estado e : estados) {
             e.setFecho(EpsilonFechoDoEstado(e, estados, new ArrayList<Estado>()));
