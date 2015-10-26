@@ -143,7 +143,7 @@ public class Automato {
         return null;
     }
 
-    public String[] getAlfa() {
+    public String[] getAlfabeto() {
         return alfabeto;
     }
 
@@ -155,11 +155,15 @@ public class Automato {
         estados.add(r);
     }
 
-    public void setAlfa(String[] alfa) {
+    public void setAlfabeto(String[] alfa) {
         this.alfabeto = alfa;
     }
+    
+    public void trocarEstados(ArrayList<Estado> estados){
+        this.estados = estados;
+    }
 
-    public void criarArquivo(String diretorio) {
+    public void escreverArquivo(String diretorio) {
 
         ArrayList<Estado> buffer = new ArrayList<Estado>();
         String inicial = "";

@@ -11,7 +11,7 @@ import java.util.*;
  *
  * @author Luca
  */
-public class Estado {
+public class Estado implements Comparable{
 
     private String nome = "";
     private ArrayList[] transicoes;                                                //a posição do elemento no array indica o símbolo do qual ele possui transição.
@@ -36,26 +36,26 @@ public class Estado {
     public void addTransicaoPorAlfa(Estado estado, String simbolo) {
         if (estado != null) {
             int i = 0;
-            while (simbolo != automato.getAlfa()[i]) {
+            while (simbolo != automato.getAlfabeto()[i]) {
                 i++;
             }
             this.transicoes[i].add(estado);
-            this.transicoes[i].sort(Comparador);
+            this.transicoes[i].sort(null);
         }
     }
 
     public void addTransicaoPorIndice(Estado estado, int indice) {
         if (estado != null) {
-            if (!Determinizador.checkIfExistsInArray(transicoes[indice], estado)) {
+            if (!Determinizador.checaSeExisteNoArray(transicoes[indice], estado)) {
                 this.transicoes[indice].add(estado);
-                this.transicoes[indice].sort(Comparador);
+                this.transicoes[indice].sort(null);
             }
         }
     }
 
     public ArrayList getTransicaoPorAlfa(String alfa) {
         int i = 0;
-        for (String a : automato.getAlfa()) {
+        for (String a : automato.getAlfabeto()) {
             if (a.equals(alfa)) {
                 return transicoes[i];
             }
@@ -163,17 +163,14 @@ public class Estado {
         this.nome = nome;
     }
 
-    public static Comparator<Estado> Comparador = new Comparator<Estado>() {
-
-        @Override
-        public int compare(Estado o1, Estado o2) {
-            String nome1 = o1.getNome();
-            String nome2 = o2.getNome();
-
-            return nome1.compareTo(nome2);
-
+    @Override
+    public int compareTo(Object o) {
+        if(!(o instanceof Estado)){
+            return 1;
         }
-
-    };
+        Estado e = (Estado)o;
+        return this.nome.compareTo(e.nome);
+    }
+            
 
 }
