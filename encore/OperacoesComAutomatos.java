@@ -13,6 +13,41 @@ import java.util.ArrayList;
  */
 public class OperacoesComAutomatos {
 
+    public static Automato concatenarAutomatos(Automato[] automatos) {
+        Automato concatenado = new Automato();
+        concatenado.setAlfabeto(automatos[0].getAlfabeto());
+        Estado novoComeco = new Estado(concatenado, "q0", automatos[0].getAlfabeto().length);
+        novoComeco.setInicial(true);
+        concatenado.addEstados(novoComeco);
+        int counterNomeEstado = 1;
+        ArrayList<Estado> finais = new ArrayList<Estado>();
+        Automato a;
+      //  for (Automato a : automatos) {
+        for(int i = 0; i < automatos.length; i++) {
+            a = automatos[i];
+            for (Estado e : a.getEstados()) {
+                e.rename("q" + counterNomeEstado);
+                counterNomeEstado++;
+                if(e.getFinal() && i != automatos.length-1) {//E não é o ultimo estado
+                    finais.add(e);
+                    e.setFinal(false);
+                }
+
+                if (e.getInicial()) {
+                    for(int j = 0; j < finais.size(); j++) {
+                        if(finais.size() == 0)
+                            break;
+                        finais.get(i).addTransicaoPorIndice(e, 0);
+                        e.setInicial(false);
+                    }
+                }
+                concatenado.addEstados(e);
+            }
+            finais = new ArrayList<Estado>();
+        }
+        return concatenado;
+    }
+    
     public static Automato UniaoMinimizacaoDeAutomatos(Automato[] automatos) {
         Automato unido = new Automato();
         unido.setAlfabeto(automatos[0].getAlfabeto());                                  //como todos os automatos supostamente terão o mesmo alfabeto pode
