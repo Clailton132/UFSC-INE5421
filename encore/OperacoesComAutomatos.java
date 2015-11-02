@@ -13,46 +13,53 @@ import java.util.ArrayList;
  */
 public class OperacoesComAutomatos {
 
-    public static Automato concatenarAutomatos(Automato[] automatos) {
-        Automato concatenado = new Automato();
-        concatenado.setAlfabeto(automatos[0].getAlfabeto());
-        Estado novoComeco = new Estado(concatenado, "q0", automatos[0].getAlfabeto().length);
-        novoComeco.setInicial(true);
-        concatenado.addEstados(novoComeco);
-        int counterNomeEstado = 1;
-        ArrayList<Estado> finais = new ArrayList<Estado>();
-        Automato a;
-      //  for (Automato a : automatos) {
-        for(int i = 0; i < automatos.length; i++) {
-            a = automatos[i];
-            for (Estado e : a.getEstados()) {
-                e.rename("q" + counterNomeEstado);
-                counterNomeEstado++;
-                if(e.getFinal() && i != automatos.length-1) {//E não é o ultimo estado
-                    finais.add(e);
-                    e.setFinal(false);
-                }
-
-                if (e.getInicial()) {
-                    for(int j = 0; j < finais.size(); j++) {
-                        if(finais.size() == 0)
-                            break;
-                        finais.get(i).addTransicaoPorIndice(e, 0);
-                        e.setInicial(false);
-                    }
-                }
-                concatenado.addEstados(e);
+    public static Automato concatenarAutomatos(Automato a1, Automato a2) {
+        
+        Automato concatenado;
+        
+        int indice = a1.getEstados().size();
+        
+        ArrayList<Estado> novos = new ArrayList<Estado>();
+        
+        Estado inicial = null;
+        
+        for(Estado e : a2.getEstados()){
+            if(e.getInicial()){
+                inicial = e;
+                e.setInicial(false);
             }
-            finais = new ArrayList<Estado>();
+            e.rename("q" + indice);
+            indice++;
         }
+        
+        for(Estado e : a1.getEstados()){
+            if(e.getFinal()){
+                e.addTransicaoPorIndice(inicial, 0);
+                e.setFinal(false);
+            }
+            novos.add(e);
+        }
+        
+        for(Estado e : a2.getEstados()){
+
+            novos.add(e);
+        }
+
+        concatenado = new Automato(novos, a1.getAlfabeto());
         return concatenado;
+        
+        
     }
     
     public static Automato UniaoMinimizacaoDeAutomatos(Automato[] automatos) {
         Automato unido = new Automato();
+        
         unido.setAlfabeto(automatos[0].getAlfabeto());                                  //como todos os automatos supostamente terão o mesmo alfabeto pode
+        
         Estado novoComeco = new Estado(unido, "q0", automatos[0].getAlfabeto().length);
+        
         novoComeco.setInicial(true);
+        
         int counter = 1;
 
         unido.addEstados(novoComeco);
@@ -119,8 +126,10 @@ public class OperacoesComAutomatos {
     }
 
     public static Automato MinimizarAutomato(Automato automato) {
-        //para minimizar, um automato deve ser deterministico, sem estados inalcansaveis, e total
-
+        //para minimizar, um automato deve ser deterministico, sem estados inalcansaveis, e total e ja esta tudo feito
+        
+        
+        
         return automato;
     }
 
