@@ -142,6 +142,15 @@ public class Automato {
         }
         return null;
     }
+    
+    public Estado getEstadoInicial(){
+        for(Estado e : this.estados){
+            if(e.getInicial()){
+                return e;
+            }
+        }
+        return null;
+    }
 
     public String[] getAlfabeto() {
         return alfabeto;

@@ -6,6 +6,7 @@
 package encore;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
@@ -128,7 +129,56 @@ public class OperacoesComAutomatos {
     public static Automato MinimizarAutomato(Automato automato) {
         //para minimizar, um automato deve ser deterministico, sem estados inalcansaveis, e total e ja esta tudo feito
         
+        //Automato alvo = new Automato(RetirarEstadosInalcancaveis(automato, automato.getEstadoInicial(), new ArrayList<Estado>()), automato.getAlfabeto());
+        //alvo = criarAutomatoTotal(alvo);
         
+        
+        //aqui, cria os dois grupos iniciais de estados
+        
+        ArrayList<ArrayList> grupos = new ArrayList();
+        
+        ArrayList<Estado> finais = new ArrayList();
+        ArrayList<Estado> naoFinais = new ArrayList();
+        
+        grupos.add(finais);
+        grupos.add(naoFinais);
+        
+        for(Estado e : automato.getEstados()){
+            if(e.getFinal()){
+                finais.add(e);
+            } else {
+                naoFinais.add(e);
+            }
+        }
+        
+        int lastSize = -1;
+        
+        
+        //enquanto o numero de grupos de uma iteracao for diferente de outra,
+        //para cada simbolo, cria um hash map para guardar as duplas das transicoes
+        //depois cria os grupos novos, baseado nas duplas novas
+        
+        while(grupos.size() != lastSize){
+            
+            
+            ArrayList<ArrayList> novosGrupos = new ArrayList();
+            
+            HashMap map = new HashMap<Estado,Integer>();
+            
+            for(String simbolo : automato.getAlfabeto()){
+                for(Estado e : automato.getEstados()){
+                    for(ArrayList<Estado> a : grupos){
+                        if(a.contains(e.getTransicaoPorAlfa(simbolo))){
+                            map.put(e,a.indexOf(e));
+                        }
+                    }
+                }
+
+                
+            }
+            
+            lastSize = grupos.size();
+        }
         
         return automato;
     }
