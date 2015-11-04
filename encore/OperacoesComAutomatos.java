@@ -55,7 +55,7 @@ public class OperacoesComAutomatos {
     public static Automato UniaoMinimizacaoDeAutomatos(Automato[] automatos) {
         Automato unido = new Automato();
         
-        unido.setAlfabeto(automatos[0].getAlfabeto());                                  //como todos os automatos supostamente terão o mesmo alfabeto pode
+        unido.setAlfabeto(automatos[0].getAlfabeto());                                  //como todos os automatos supostamente terÃ£o o mesmo alfabeto pode
         
         Estado novoComeco = new Estado(unido, "q0", automatos[0].getAlfabeto().length);
         
@@ -104,9 +104,9 @@ public class OperacoesComAutomatos {
 
     }
 
-    //boas praticas...: um método não deve alterar diretamente as entradas, deve retornar algo para ser utilizado depois
+    //boas praticas...: um mÃ©todo nÃ£o deve alterar diretamente as entradas, deve retornar algo para ser utilizado depois
     public static Automato criarAutomatoTotal(Automato automato) {
-        //Em um automato total, todos os estados possuem transicoes com todos os símbolos
+        //Em um automato total, todos os estados possuem transicoes com todos os sÃ­mbolos
         Automato temp = automato;
         Estado D = new Estado(temp, "q" + temp.getEstados().size(), temp.getAlfabeto().length);
         for (Estado e : temp.getEstados()) {
@@ -174,11 +174,37 @@ public class OperacoesComAutomatos {
                     }
                 }
 
+                //para cada grupo checar e comparar o primeiro elemento como resto, no maximo uma divisao por grupo.
+                //adicionando tudo que for diferente do primeiro ao segundo grupo, o resto mantem.
+                
+                for(ArrayList<Estado> a : grupos){
+                    
+                    novosGrupos.remove(a);
+                    ArrayList<Estado> novogrupo1 = new ArrayList();
+                    ArrayList<Estado> novogrupo2 = new ArrayList();
+                    
+                    for(Estado e : a){
+                        if(!map.get(e).equals(map.get(a.get(0)))){
+                            novogrupo1.add(e);
+                        } else {
+                            novogrupo2.add(e);
+                        }
+                        
+                    }
+                    
+                    novosGrupos.add(novogrupo1);
+                    novosGrupos.add(novogrupo2);
+                }
                 
             }
-            
             lastSize = grupos.size();
+            grupos = novosGrupos;
         }
+        
+        ArrayList<Estado> EstadosNovos = new ArrayList();
+        
+        //só falta criar os estados, e ver as transicoes... 
+        
         
         return automato;
     }
