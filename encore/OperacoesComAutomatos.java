@@ -6,6 +6,7 @@
 package encore;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
@@ -13,11 +14,53 @@ import java.util.ArrayList;
  */
 public class OperacoesComAutomatos {
 
+    public static Automato concatenarAutomatos(Automato a1, Automato a2) {
+        
+        Automato concatenado;
+        
+        int indice = a1.getEstados().size();
+        
+        ArrayList<Estado> novos = new ArrayList<Estado>();
+        
+        Estado inicial = null;
+        
+        for(Estado e : a2.getEstados()){
+            if(e.getInicial()){
+                inicial = e;
+                e.setInicial(false);
+            }
+            e.rename("q" + indice);
+            indice++;
+        }
+        
+        for(Estado e : a1.getEstados()){
+            if(e.getFinal()){
+                e.addTransicaoPorIndice(inicial, 0);
+                e.setFinal(false);
+            }
+            novos.add(e);
+        }
+        
+        for(Estado e : a2.getEstados()){
+
+            novos.add(e);
+        }
+
+        concatenado = new Automato(novos, a1.getAlfabeto());
+        return concatenado;
+        
+        
+    }
+    
     public static Automato UniaoMinimizacaoDeAutomatos(Automato[] automatos) {
         Automato unido = new Automato();
+        
         unido.setAlfabeto(automatos[0].getAlfabeto());                                  //como todos os automatos supostamente terão o mesmo alfabeto pode
+        
         Estado novoComeco = new Estado(unido, "q0", automatos[0].getAlfabeto().length);
+        
         novoComeco.setInicial(true);
+        
         int counter = 1;
 
         unido.addEstados(novoComeco);
@@ -84,8 +127,59 @@ public class OperacoesComAutomatos {
     }
 
     public static Automato MinimizarAutomato(Automato automato) {
-        //para minimizar, um automato deve ser deterministico, sem estados inalcansaveis, e total
+        //para minimizar, um automato deve ser deterministico, sem estados inalcansaveis, e total e ja esta tudo feito
+        
+        //Automato alvo = new Automato(RetirarEstadosInalcancaveis(automato, automato.getEstadoInicial(), new ArrayList<Estado>()), automato.getAlfabeto());
+        //alvo = criarAutomatoTotal(alvo);
+        
+        
+        //aqui, cria os dois grupos iniciais de estados
+        
+        ArrayList<ArrayList> grupos = new ArrayList();
+        
+        ArrayList<Estado> finais = new ArrayList();
+        ArrayList<Estado> naoFinais = new ArrayList();
+        
+        grupos.add(finais);
+        grupos.add(naoFinais);
+        
+        for(Estado e : automato.getEstados()){
+            if(e.getFinal()){
+                finais.add(e);
+            } else {
+                naoFinais.add(e);
+            }
+        }
+        
+        int lastSize = -1;
+        
+        
+        //enquanto o numero de grupos de uma iteracao for diferente de outra,
+        //para cada simbolo, cria um hash map para guardar as duplas das transicoes
+        //depois cria os grupos novos, baseado nas duplas novas
+        
+        while(grupos.size() != lastSize){
+            
+            
+            ArrayList<ArrayList> novosGrupos = new ArrayList();
+            
+            HashMap map = new HashMap<Estado,Integer>();
+            
+            for(String simbolo : automato.getAlfabeto()){
+                for(Estado e : automato.getEstados()){
+                    for(ArrayList<Estado> a : grupos){
+                        if(a.contains(e.getTransicaoPorAlfa(simbolo))){
+                            map.put(e,a.indexOf(e));
+                        }
+                    }
+                }
 
+                
+            }
+            
+            lastSize = grupos.size();
+        }
+        
         return automato;
     }
 
