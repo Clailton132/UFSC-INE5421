@@ -17,8 +17,8 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Automato a1 = new Automato("C:\\Programations\\Exemplo\\Teste 4.txt");
-        Automato a2 = new Automato("C:\\Programations\\Exemplo\\Teste 4.txt");
+        Automato a1 = new Automato("C:\\Programations\\Exemplo\\Teste 5.txt");
+        //Automato a2 = new Automato("C:\\Programations\\Exemplo\\Teste 4.txt");
         
         //Determinizador.Determinizar(a1);
         /*
@@ -33,13 +33,20 @@ public class Main {
         a3.escreverArquivo("C:\\Programations\\Exemplo\\Resultado.txt");
         */
         //Determinizador.prepararEpsilons(a1.getEstados());
-        a1.print();
-        a2.print();
+        //a1.print();
+        //a2.print();
         
-        Automato a3 = OperacoesComAutomatos.concatenarAutomatos(a1, a2);
-        
-        a3.print();
-    
+        ArrayList <ArrayList> a3 = OperacoesComAutomatos.MinimizarAutomato(a1);
+        /*
+        for(ArrayList<Estado> a : a3) {
+            System.out.print("{");
+            for(Estado e : a){
+                System.out.print(e.getNome());
+            }
+            System.out.println("}");
+        }
+                */
+    //yaaaaaaaaaaaaay
     }
     
 }
