@@ -15,52 +15,51 @@ import java.util.HashMap;
 public class OperacoesComAutomatos {
 
     public static Automato concatenarAutomatos(Automato a1, Automato a2) {
-        
+
         Automato concatenado;
-        
+
         int indice = a1.getEstados().size();
-        
+
         ArrayList<Estado> novos = new ArrayList<Estado>();
-        
+
         Estado inicial = null;
-        
-        for(Estado e : a2.getEstados()){
-            if(e.getInicial()){
+
+        for (Estado e : a2.getEstados()) {
+            if (e.getInicial()) {
                 inicial = e;
                 e.setInicial(false);
             }
             e.rename("q" + indice);
             indice++;
         }
-        
-        for(Estado e : a1.getEstados()){
-            if(e.getFinal()){
+
+        for (Estado e : a1.getEstados()) {
+            if (e.getFinal()) {
                 e.addTransicaoPorIndice(inicial, 0);
                 e.setFinal(false);
             }
             novos.add(e);
         }
-        
-        for(Estado e : a2.getEstados()){
+
+        for (Estado e : a2.getEstados()) {
 
             novos.add(e);
         }
 
         concatenado = new Automato(novos, a1.getAlfabeto());
         return concatenado;
-        
-        
+
     }
-    
+
     public static Automato UniaoMinimizacaoDeAutomatos(Automato[] automatos) {
         Automato unido = new Automato();
-        
+
         unido.setAlfabeto(automatos[0].getAlfabeto());                                  //como todos os automatos supostamente terÃ£o o mesmo alfabeto pode
-        
+
         Estado novoComeco = new Estado(unido, "q0", automatos[0].getAlfabeto().length);
-        
+
         novoComeco.setInicial(true);
-        
+
         int counter = 1;
 
         unido.addEstados(novoComeco);
@@ -126,87 +125,112 @@ public class OperacoesComAutomatos {
         return temp;
     }
 
-    public static Automato MinimizarAutomato(Automato automato) {
+    public static ArrayList<ArrayList> MinimizarAutomato(Automato automato) {
         //para minimizar, um automato deve ser deterministico, sem estados inalcansaveis, e total e ja esta tudo feito
-        
+
         //Automato alvo = new Automato(RetirarEstadosInalcancaveis(automato, automato.getEstadoInicial(), new ArrayList<Estado>()), automato.getAlfabeto());
         //alvo = criarAutomatoTotal(alvo);
-        
-        
         //aqui, cria os dois grupos iniciais de estados
-        
         ArrayList<ArrayList> grupos = new ArrayList();
-        
+
         ArrayList<Estado> finais = new ArrayList();
         ArrayList<Estado> naoFinais = new ArrayList();
-        
-        grupos.add(finais);
+
         grupos.add(naoFinais);
-        
-        for(Estado e : automato.getEstados()){
-            if(e.getFinal()){
+        grupos.add(finais);
+
+        for (Estado e : automato.getEstados()) {
+            if (e.getFinal()) {
                 finais.add(e);
             } else {
                 naoFinais.add(e);
             }
         }
-        
+
+        for (ArrayList<Estado> a : grupos) {
+            for (Estado e : a) {
+                System.out.println(grupos.indexOf(a) + " " + e.getNome());
+            }
+
+        }
+        System.out.println();
+
         int lastSize = -1;
-        
-        
+
         //enquanto o numero de grupos de uma iteracao for diferente de outra,
         //para cada simbolo, cria um hash map para guardar as duplas das transicoes
         //depois cria os grupos novos, baseado nas duplas novas
-        
-        while(grupos.size() != lastSize){
-            
-            
+        while (grupos.size() != lastSize) {
+
             ArrayList<ArrayList> novosGrupos = new ArrayList();
-            
-            HashMap map = new HashMap<Estado,Integer>();
-            
-            for(String simbolo : automato.getAlfabeto()){
-                for(Estado e : automato.getEstados()){
-                    for(ArrayList<Estado> a : grupos){
-                        if(a.contains(e.getTransicaoPorAlfa(simbolo))){
-                            map.put(e,a.indexOf(e));
+
+            HashMap map = new HashMap<Estado, Integer>();
+
+            for (String simbolo : automato.getAlfabeto()) {
+                if (!simbolo.equals("E")) {
+                    for (Estado e : automato.getEstados()) {
+                        for (ArrayList<Estado> a : grupos) {
+                            if (a.contains(e.getTransicaoPorAlfa(simbolo).get(0))) {
+                                map.put(e, grupos.indexOf(a));
+                            }
                         }
                     }
-                }
 
-                //para cada grupo checar e comparar o primeiro elemento como resto, no maximo uma divisao por grupo.
-                //adicionando tudo que for diferente do primeiro ao segundo grupo, o resto mantem.
-                
-                for(ArrayList<Estado> a : grupos){
+                    for(Object o : map.keySet()){
+                        Estado e = (Estado)o;
+                        System.out.println(e.getNome() + " " + map.get(e));
+                    }
                     
-                    novosGrupos.remove(a);
-                    ArrayList<Estado> novogrupo1 = new ArrayList();
-                    ArrayList<Estado> novogrupo2 = new ArrayList();
-                    
-                    for(Estado e : a){
-                        if(!map.get(e).equals(map.get(a.get(0)))){
-                            novogrupo1.add(e);
-                        } else {
-                            novogrupo2.add(e);
+                    //para cada grupo checar e comparar o primeiro elemento como resto, no maximo uma divisao por grupo.
+                    //adicionando tudo que for diferente do primeiro ao segundo grupo, o resto mantem.
+                    for (int i = 0; i < grupos.size(); i++) {
+                        
+                        ArrayList<Estado> a = grupos.get(i);
+                        
+                        ArrayList<Estado> novogrupo1 = new ArrayList();
+                        ArrayList<Estado> novogrupo2 = new ArrayList();
+
+                        for (Estado e : a) {
+                            if (map.get(e).equals(map.get(a.get(0)))) {
+                                novogrupo1.add(e);
+                            } else {
+                                novogrupo2.add(e);
+                            }
+
+                        }
+
+                        novosGrupos.add(novogrupo1);
+
+                        if (novogrupo2.size() != 0) {
+                            novosGrupos.add(novogrupo2);
                         }
                         
+                        System.out.println("novos " + novosGrupos.size());
                     }
+
+                    lastSize = grupos.size();
+                    grupos.clear();
+                    grupos.addAll(novosGrupos);
+                    novosGrupos.clear();
                     
-                    novosGrupos.add(novogrupo1);
-                    novosGrupos.add(novogrupo2);
+                    
+                    System.out.println("-");
+                    for (ArrayList<Estado> a : grupos) {
+                        for (Estado e : a) {
+                            System.out.println(grupos.indexOf(a) + " " + e.getNome());   
+                        }
+                    }
+                    System.out.println(simbolo + " " + grupos.size() + " " + lastSize);
+                    System.out.println();
                 }
                 
             }
-            lastSize = grupos.size();
-            grupos = novosGrupos;
         }
-        
+
         ArrayList<Estado> EstadosNovos = new ArrayList();
-        
+
         //só falta criar os estados, e ver as transicoes... 
-        
-        
-        return automato;
+        return grupos;
     }
 
     //public static void RetirarEstadosInalcansaveis(Gramatica gramatica){
