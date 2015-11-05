@@ -17,7 +17,7 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Automato a1 = new Automato("C:\\Programations\\Exemplo\\Teste 5.txt");
+        Automato a1 = new Automato("test/AFtoGRAMATICA.in");
         //Automato a2 = new Automato("C:\\Programations\\Exemplo\\Teste 4.txt");
         
         //Determinizador.Determinizar(a1);

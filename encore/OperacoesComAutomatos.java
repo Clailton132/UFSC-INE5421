@@ -227,10 +227,39 @@ public class OperacoesComAutomatos {
             }
         }
 
-        ArrayList<Estado> EstadosNovos = new ArrayList();
-
-        //só falta criar os estados, e ver as transicoes... 
+        ArrayList<Estado> estadosNovos = new ArrayList();
+        Automato newAutomatoMinimizado = new Automato();
+        int estadoParaTransicao = -1;
+        Estado tempEstado;
+        
+        //Adiciona o primeiro estado de cada grupo para o array de estados do automato minimizado
+        for (ArrayList<Estado> a : grupos)
+            estadosNovos.add(a.get(0));
+        
+        for (ArrayList<Estado> a : grupos) {
+            tempEstado = a.get(0); //Primeiro elemento de cada grupo
+            //Passa por todas as transições do estado
+            for (int j = 0; j < tempEstado.getTransicoes().length; j++) {
+                Estado est = tempEstado.getTransicaoPorIndice(j).get(0); //Já que está determinizado pode pegar só o primeiro, só vai ter um estado
+                for(int k = 0; k < grupos.size(); k++) {
+                    estadoParaTransicao = OperacoesComAutomatos.indiceEstadoNoGrupo(grupos.get(k), est);//Indice de qual estado é a transição
+                }
+                tempEstado.addTransicaoPorIndice(estadosNovos.get(estadoParaTransicao), j);//Adiciona a transição por indíce   
+            }
+            newAutomatoMinimizado.addEstados(tempEstado);
+        }
+        
+        newAutomatoMinimizado.print();
         return grupos;
+        
+        
+    }
+    
+    private static int indiceEstadoNoGrupo(ArrayList<Estado> grupo, Estado est) {
+        for(int i = 0; i < grupo.size(); i ++)
+            if(grupo.get(i).getNome().compareTo(est.getNome()) == 0)
+                return i;
+        return -1;
     }
 
     //public static void RetirarEstadosInalcansaveis(Gramatica gramatica){
