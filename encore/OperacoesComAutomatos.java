@@ -269,6 +269,7 @@ public class OperacoesComAutomatos {
 
         newAutomatoMinimizado.setAlfabeto(automatoAlvo.getAlfabeto());
         newAutomatoMinimizado.print();
+
         return grupos;
 
     }
@@ -280,6 +281,20 @@ public class OperacoesComAutomatos {
             }
         }
         return -1;
+    }
+    
+    
+    public static boolean percorrerAutomato(Automato af, String entrada) {
+        
+        Estado estadoAtual = af.getEstadoInicial();
+        Estado estadoProximo;
+        char charAtual;
+        for(int i = 0; i < entrada.length(); i ++) {
+            charAtual = entrada.charAt(i);
+            ArrayList<Estado> arrayDeEstado = estadoAtual.getTransicaoPorAlfa("" + charAtual);
+            estadoAtual = arrayDeEstado.get(0);   
+        }
+        return estadoAtual.getFinal();
     }
 
     //public static void RetirarEstadosInalcansaveis(Gramatica gramatica){
