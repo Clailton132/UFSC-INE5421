@@ -1,0 +1,6 @@
+prg olamundo :
+var frase : str;
+beg:
+frase = "ola mundo";
+wrt ( frase );
+end;

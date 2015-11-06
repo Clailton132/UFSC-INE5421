@@ -130,7 +130,7 @@ public class OperacoesComAutomatos {
         return temp;
     }
 
-    public static ArrayList<ArrayList> MinimizarAutomato(Automato automatoAlvo) {
+    public static Automato MinimizarAutomato(Automato automatoAlvo) {
         //para minimizar, um automato deve ser deterministico, sem estados inalcansaveis, e total e ja esta tudo feito
 
         Automato automato = new Automato(RetirarEstadosInalcancaveis(automatoAlvo, automatoAlvo.getEstadoInicial(), new ArrayList<Estado>()), automatoAlvo.getAlfabeto());
@@ -176,7 +176,7 @@ public class OperacoesComAutomatos {
                         }
                     }
                     
-                    //*
+                    /*
                     for (Object o : map.keySet()) {
                         Estado e = (Estado) o;
                         System.out.println(e.getNome() + " " + map.get(e));
@@ -214,7 +214,7 @@ public class OperacoesComAutomatos {
                     grupos.addAll(novosGrupos);
                     novosGrupos.clear();
 
-                    //*
+                    /*
                     
                      System.out.println("-");
                      for (ArrayList<Estado> a : grupos) {
@@ -285,7 +285,7 @@ public class OperacoesComAutomatos {
        // System.out.println("AGORA");
         //OperacoesComAutomatos.analiseLexica(newAutomatoMinimizado, "/home/luz/Dropbox/workspace/formais-e-compiladores/src/tests/Programa.txt");
         
-        return grupos;
+        return newAutomatoMinimizado;
 
     }
 
