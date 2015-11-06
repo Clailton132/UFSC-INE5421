@@ -39,9 +39,9 @@ public class Main {
         
         //a1.print();
         
-        //ArrayList <ArrayList> a3 = OperacoesComAutomatos.MinimizarAutomato(a1);
+        ArrayList <ArrayList> a3 = OperacoesComAutomatos.MinimizarAutomato(a1);
         //System.out.println(OperacoesComAutomatos.percorrerAutomato(a1, "abab"));
-        System.out.println(OperacoesComAutomatos.analiseLexica(a1, "/home/luz/Dropbox/workspace/formais-e-compiladores/src/tests/Programa.txt"));
+        //System.out.println(OperacoesComAutomatos.analiseLexica(a1, "/home/luz/Dropbox/workspace/formais-e-compiladores/src/tests/Programa.txt"));
         
         /*
         for(ArrayList<Estado> a : a3) {
