@@ -267,24 +267,9 @@ public class OperacoesComAutomatos {
             newAutomatoMinimizado.addEstados(tempEstado1);
         }
 
-<<<<<<< HEAD
-        ArrayList<Estado> estadosNovos = new ArrayList();
-       // ArrayList<Estado> grupo;
-        //for(int i = 0; i < grupos.size(); i ++) {
-          //  grupos.get(i).get(i).
-            
-            
-       // }
-        
-        for (ArrayList<Estado> a : grupos) {
-            for (Estado e : a) {
-                  
-            }
-        //só falta criar os estados, e ver as transicoes... 
-=======
         newAutomatoMinimizado.setAlfabeto(automatoAlvo.getAlfabeto());
         newAutomatoMinimizado.print();
->>>>>>> 249882fab72ead1ab004cae9db53e0add19850fc
+
         return grupos;
 
     }
