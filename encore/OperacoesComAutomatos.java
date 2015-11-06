@@ -5,8 +5,13 @@
  */
 package encore;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -236,6 +241,12 @@ public class OperacoesComAutomatos {
         
         for (ArrayList<Estado> a : grupos) {
             Estado novo = new Estado(newAutomatoMinimizado, "q" + index, automato.getAlfabeto().length);
+            for(int i = 0; i < a.size(); i++) {
+                if(a.get(i).getFinal())
+                    novo.setFinal(true);
+                if(a.get(i).getInicial())
+                    novo.setInicial(true);
+            }
             estadosNovos.add(novo);
             index++;
         }
@@ -269,7 +280,9 @@ public class OperacoesComAutomatos {
 
         newAutomatoMinimizado.setAlfabeto(automatoAlvo.getAlfabeto());
         newAutomatoMinimizado.print();
-
+       // System.out.println("AGORA");
+        //OperacoesComAutomatos.analiseLexica(newAutomatoMinimizado, "/home/luz/Dropbox/workspace/formais-e-compiladores/src/tests/Programa.txt");
+        
         return grupos;
 
     }
@@ -295,6 +308,36 @@ public class OperacoesComAutomatos {
             estadoAtual = arrayDeEstado.get(0);   
         }
         return estadoAtual.getFinal();
+    }
+    
+    
+    public static String analiseLexica(Automato af, String diretorio) {
+            String[] palavraReservada;
+            int currentLine = 1;
+            String linesWProblem = "Problema está nas linhas: ";
+        try {
+            File arquivo = new File(diretorio);
+            Scanner scanner = new Scanner(arquivo);
+
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                //System.out.println(line);
+                palavraReservada = line.split(" ");
+               // System.out.println(palavraReservada[0]);
+                //System.out.println("Aceita ou nao " + OperacoesComAutomatos.percorrerAutomato(af, palavraReservada[0]));
+                if (palavraReservada[0] != null && palavraReservada[0] != "\n" && !OperacoesComAutomatos.percorrerAutomato(af, palavraReservada[0])) {
+                    linesWProblem += (currentLine + ", ");
+                    //System.out.println(linesWProblem);
+                }
+                 currentLine++;
+            }
+            scanner.close();
+            linesWProblem = linesWProblem.substring(0, linesWProblem.length()-2);
+            
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(OperacoesComAutomatos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return linesWProblem;
     }
 
     //public static void RetirarEstadosInalcansaveis(Gramatica gramatica){
