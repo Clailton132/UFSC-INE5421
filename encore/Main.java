@@ -36,6 +36,8 @@ public class Main {
         //a1.print();
         //a2.print();
         
+        a1.print();
+        
         ArrayList <ArrayList> a3 = OperacoesComAutomatos.MinimizarAutomato(a1);
         /*
         for(ArrayList<Estado> a : a3) {

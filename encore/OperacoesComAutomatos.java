@@ -125,12 +125,13 @@ public class OperacoesComAutomatos {
         return temp;
     }
 
-    public static ArrayList<ArrayList> MinimizarAutomato(Automato automato) {
+    public static ArrayList<ArrayList> MinimizarAutomato(Automato automatoAlvo) {
         //para minimizar, um automato deve ser deterministico, sem estados inalcansaveis, e total e ja esta tudo feito
 
-        //Automato alvo = new Automato(RetirarEstadosInalcancaveis(automato, automato.getEstadoInicial(), new ArrayList<Estado>()), automato.getAlfabeto());
-        //alvo = criarAutomatoTotal(alvo);
+        Automato automato = new Automato(RetirarEstadosInalcancaveis(automatoAlvo, automatoAlvo.getEstadoInicial(), new ArrayList<Estado>()), automatoAlvo.getAlfabeto());
+        automato = criarAutomatoTotal(automato);
         //aqui, cria os dois grupos iniciais de estados
+
         ArrayList<ArrayList> grupos = new ArrayList();
 
         ArrayList<Estado> finais = new ArrayList();
@@ -139,7 +140,7 @@ public class OperacoesComAutomatos {
         grupos.add(naoFinais);
         grupos.add(finais);
 
-        for (Estado e : automato.getEstados()) {
+        for (Estado e : automatoAlvo.getEstados()) {
             if (e.getFinal()) {
                 finais.add(e);
             } else {
@@ -147,12 +148,6 @@ public class OperacoesComAutomatos {
             }
         }
 
-        for (ArrayList<Estado> a : grupos) {
-            for (Estado e : a) {
-                System.out.println(grupos.indexOf(a) + " " + e.getNome());
-            }
-
-        }
         System.out.println();
 
         int lastSize = -1;
@@ -166,27 +161,29 @@ public class OperacoesComAutomatos {
 
             HashMap map = new HashMap<Estado, Integer>();
 
-            for (String simbolo : automato.getAlfabeto()) {
+            for (String simbolo : automatoAlvo.getAlfabeto()) {
                 if (!simbolo.equals("E")) {
-                    for (Estado e : automato.getEstados()) {
+                    for (Estado e : automatoAlvo.getEstados()) {
                         for (ArrayList<Estado> a : grupos) {
                             if (a.contains(e.getTransicaoPorAlfa(simbolo).get(0))) {
                                 map.put(e, grupos.indexOf(a));
                             }
                         }
                     }
-
-                    for(Object o : map.keySet()){
-                        Estado e = (Estado)o;
+                    
+                    //*
+                    for (Object o : map.keySet()) {
+                        Estado e = (Estado) o;
                         System.out.println(e.getNome() + " " + map.get(e));
                     }
-                    
+                    //*/
+
                     //para cada grupo checar e comparar o primeiro elemento como resto, no maximo uma divisao por grupo.
                     //adicionando tudo que for diferente do primeiro ao segundo grupo, o resto mantem.
                     for (int i = 0; i < grupos.size(); i++) {
-                        
+
                         ArrayList<Estado> a = grupos.get(i);
-                        
+
                         ArrayList<Estado> novogrupo1 = new ArrayList();
                         ArrayList<Estado> novogrupo2 = new ArrayList();
 
@@ -204,29 +201,73 @@ public class OperacoesComAutomatos {
                         if (novogrupo2.size() != 0) {
                             novosGrupos.add(novogrupo2);
                         }
-                        
-                        System.out.println("novos " + novosGrupos.size());
+
                     }
 
                     lastSize = grupos.size();
                     grupos.clear();
                     grupos.addAll(novosGrupos);
                     novosGrupos.clear();
+
+                    //*
                     
-                    
-                    System.out.println("-");
-                    for (ArrayList<Estado> a : grupos) {
-                        for (Estado e : a) {
-                            System.out.println(grupos.indexOf(a) + " " + e.getNome());   
-                        }
-                    }
-                    System.out.println(simbolo + " " + grupos.size() + " " + lastSize);
-                    System.out.println();
+                     System.out.println("-");
+                     for (ArrayList<Estado> a : grupos) {
+                     for (Estado e : a) {
+                     System.out.println(grupos.indexOf(a) + " " + e.getNome());
+                     }
+                     }
+                     System.out.println(simbolo + " " + grupos.size() + " " + lastSize);
+                     System.out.println();
+                     //*/
                 }
-                
+
             }
         }
 
+        ArrayList<Estado> estadosNovos = new ArrayList();
+        Automato newAutomatoMinimizado = new Automato();
+        int estadoParaTransicao = -1;
+        Estado tempEstado;
+        Estado tempEstado1;
+
+        //Adiciona o primeiro estado de cada grupo para o array de estados do automato minimizado
+        int index = 0;
+        
+        for (ArrayList<Estado> a : grupos) {
+            Estado novo = new Estado(newAutomatoMinimizado, "q" + index, automato.getAlfabeto().length);
+            estadosNovos.add(novo);
+            index++;
+        }
+
+        
+        int i = 0;
+        
+        for (ArrayList<Estado> a : grupos) {
+            tempEstado = a.get(0); //Primeiro elemento de cada grupo
+            //Passa por todas as transições do estado
+            
+            
+            tempEstado1 = estadosNovos.get(i);
+            i++;
+            
+            for (int j = 1; j < tempEstado.getTransicoes().length; j++) {
+                Estado est = tempEstado.getTransicaoPorIndice(j).get(0); //Já que está determinizado pode pegar só o primeiro, só vai ter um estado
+                for (int k = 0; k < grupos.size(); k++) {
+                    if (grupos.get(k).indexOf(est) != -1) {
+                        estadoParaTransicao = grupos.get(k).indexOf(est);//Indice de qual estado é a transição
+                        break;
+                    }
+                }
+                
+ 
+                
+                tempEstado1.addTransicaoPorIndice(estadosNovos.get(estadoParaTransicao), j);//Adiciona a transição por indíce   
+            }
+            newAutomatoMinimizado.addEstados(tempEstado1);
+        }
+
+<<<<<<< HEAD
         ArrayList<Estado> estadosNovos = new ArrayList();
        // ArrayList<Estado> grupo;
         //for(int i = 0; i < grupos.size(); i ++) {
@@ -240,7 +281,35 @@ public class OperacoesComAutomatos {
                   
             }
         //só falta criar os estados, e ver as transicoes... 
+=======
+        newAutomatoMinimizado.setAlfabeto(automatoAlvo.getAlfabeto());
+        newAutomatoMinimizado.print();
+>>>>>>> 249882fab72ead1ab004cae9db53e0add19850fc
         return grupos;
+
+    }
+
+    private static int indiceEstadoNoGrupo(ArrayList<Estado> grupo, Estado est) {
+        for (int i = 0; i < grupo.size(); i++) {
+            if (grupo.get(i).getNome().compareTo(est.getNome()) == 0) {
+                return i;
+            }
+        }
+        return -1;
+    }
+    
+    
+    public static boolean percorrerAutomato(Automato af, String entrada) {
+        
+        Estado estadoAtual = af.getEstadoInicial();
+        Estado estadoProximo;
+        char charAtual;
+        for(int i = 0; i < entrada.length(); i ++) {
+            charAtual = entrada.charAt(i);
+            ArrayList<Estado> arrayDeEstado = estadoAtual.getTransicaoPorAlfa("" + charAtual);
+            estadoAtual = arrayDeEstado.get(0);   
+        }
+        return estadoAtual.getFinal();
     }
 
     //public static void RetirarEstadosInalcansaveis(Gramatica gramatica){
