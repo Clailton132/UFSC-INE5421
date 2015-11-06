@@ -56,7 +56,7 @@ public class OperacoesComAutomatos {
 
     }
 
-    public static Automato UniaoMinimizacaoDeAutomatos(Automato[] automatos) {
+    public static Automato UniaoDeAutomatos(Automato[] automatos) {
         Automato unido = new Automato();
 
         unido.setAlfabeto(automatos[0].getAlfabeto());                                  //como todos os automatos supostamente terÃ£o o mesmo alfabeto pode
@@ -108,11 +108,29 @@ public class OperacoesComAutomatos {
 
     }
 
+    
+    public static void ResolucaoDeProblema(Automato unido){
+        Estado a = unido.getEstadoInicial();
+        
+        String novo = "";
+        Estado Novo = new Estado(unido,"q0",unido.getAlfabeto().length);
+        
+        for(Estado e : a.getTransicaoPorIndice(0)){
+            
+                        
+        }
+        
+        
+
+        
+    }
+    
     //boas praticas...: um mÃ©todo nÃ£o deve alterar diretamente as entradas, deve retornar algo para ser utilizado depois
     public static Automato criarAutomatoTotal(Automato automato) {
         //Em um automato total, todos os estados possuem transicoes com todos os sÃ­mbolos
         Automato temp = automato;
         Estado D = new Estado(temp, "q" + temp.getEstados().size(), temp.getAlfabeto().length);
+        D.setFinal(true);
         for (Estado e : temp.getEstados()) {
             for (int i = 1; i < e.getTransicoes().length; i++) {
                 if (e.getTransicaoPorIndice(i).size() == 0) {
@@ -175,14 +193,13 @@ public class OperacoesComAutomatos {
                             }
                         }
                     }
-                    
-                    /*
-                    for (Object o : map.keySet()) {
-                        Estado e = (Estado) o;
-                        System.out.println(e.getNome() + " " + map.get(e));
-                    }
-                    //*/
 
+                    /*
+                     for (Object o : map.keySet()) {
+                     Estado e = (Estado) o;
+                     System.out.println(e.getNome() + " " + map.get(e));
+                     }
+                     //*/
                     //para cada grupo checar e comparar o primeiro elemento como resto, no maximo uma divisao por grupo.
                     //adicionando tudo que for diferente do primeiro ao segundo grupo, o resto mantem.
                     for (int i = 0; i < grupos.size(); i++) {
@@ -238,30 +255,30 @@ public class OperacoesComAutomatos {
 
         //Adiciona o primeiro estado de cada grupo para o array de estados do automato minimizado
         int index = 0;
-        
+
         for (ArrayList<Estado> a : grupos) {
             Estado novo = new Estado(newAutomatoMinimizado, "q" + index, automato.getAlfabeto().length);
-            for(int i = 0; i < a.size(); i++) {
-                if(a.get(i).getFinal())
+            for (int i = 0; i < a.size(); i++) {
+                if (a.get(i).getFinal()) {
                     novo.setFinal(true);
-                if(a.get(i).getInicial())
+                }
+                if (a.get(i).getInicial()) {
                     novo.setInicial(true);
+                }
             }
             estadosNovos.add(novo);
             index++;
         }
 
-        
         int i = 0;
-        
+
         for (ArrayList<Estado> a : grupos) {
             tempEstado = a.get(0); //Primeiro elemento de cada grupo
             //Passa por todas as transições do estado
-            
-            
+
             tempEstado1 = estadosNovos.get(i);
             i++;
-            
+
             for (int j = 1; j < tempEstado.getTransicoes().length; j++) {
                 Estado est = tempEstado.getTransicaoPorIndice(j).get(0); //Já que está determinizado pode pegar só o primeiro, só vai ter um estado
                 for (int k = 0; k < grupos.size(); k++) {
@@ -272,9 +289,7 @@ public class OperacoesComAutomatos {
                         break;
                     }
                 }
-                
- 
-                
+
                 tempEstado1.addTransicaoPorIndice(estadosNovos.get(estadoParaTransicao), j);//Adiciona a transição por indíce   
             }
             newAutomatoMinimizado.addEstados(tempEstado1);
@@ -282,9 +297,9 @@ public class OperacoesComAutomatos {
 
         newAutomatoMinimizado.setAlfabeto(automatoAlvo.getAlfabeto());
         newAutomatoMinimizado.print();
-       // System.out.println("AGORA");
+        // System.out.println("AGORA");
         //OperacoesComAutomatos.analiseLexica(newAutomatoMinimizado, "/home/luz/Dropbox/workspace/formais-e-compiladores/src/tests/Programa.txt");
-        
+
         return newAutomatoMinimizado;
 
     }
@@ -297,26 +312,24 @@ public class OperacoesComAutomatos {
         }
         return -1;
     }
-    
-    
+
     public static boolean percorrerAutomato(Automato af, String entrada) {
-        
+
         Estado estadoAtual = af.getEstadoInicial();
         Estado estadoProximo;
         char charAtual;
-        for(int i = 0; i < entrada.length(); i ++) {
+        for (int i = 0; i < entrada.length(); i++) {
             charAtual = entrada.charAt(i);
             ArrayList<Estado> arrayDeEstado = estadoAtual.getTransicaoPorAlfa("" + charAtual);
-            estadoAtual = arrayDeEstado.get(0);   
+            estadoAtual = arrayDeEstado.get(0);
         }
         return estadoAtual.getFinal();
     }
-    
-    
+
     public static String analiseLexica(Automato af, String diretorio) {
-            String[] palavraReservada;
-            int currentLine = 1;
-            String linesWProblem = "Problema está nas linhas: ";
+        String[] palavras;
+        int currentLine = 1;
+        String linesWProblem = "Problema está nas linhas: ";
         try {
             File arquivo = new File(diretorio);
             Scanner scanner = new Scanner(arquivo);
@@ -324,18 +337,23 @@ public class OperacoesComAutomatos {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
                 //System.out.println(line);
-                palavraReservada = line.split(" ");
-               // System.out.println(palavraReservada[0]);
+                palavras = line.split(" ");
+                //System.out.println(palavraReservada[0]);
                 //System.out.println("Aceita ou nao " + OperacoesComAutomatos.percorrerAutomato(af, palavraReservada[0]));
-                if (palavraReservada[0] != null && palavraReservada[0] != "\n" && !OperacoesComAutomatos.percorrerAutomato(af, palavraReservada[0])) {
-                    linesWProblem += (currentLine + ", ");
-                    //System.out.println(linesWProblem);
+
+                for (int i = 0; i < palavras.length; i++) {
+                    if (palavras[i] != "\n") {
+                        if (palavras[i] != null && !OperacoesComAutomatos.percorrerAutomato(af, palavras[i])) {
+                            linesWProblem += (currentLine + ", ");
+                            //System.out.println(linesWProblem);
+                        }
+                    }
                 }
-                 currentLine++;
+                currentLine++;
             }
             scanner.close();
-            linesWProblem = linesWProblem.substring(0, linesWProblem.length()-2);
-            
+            linesWProblem = linesWProblem.substring(0, linesWProblem.length() - 2);
+
         } catch (FileNotFoundException ex) {
             Logger.getLogger(OperacoesComAutomatos.class.getName()).log(Level.SEVERE, null, ex);
         }

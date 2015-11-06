@@ -17,7 +17,8 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Automato a1 = new Automato("C:\\Programations\\Exemplo\\Teste 5.txt");
+        Automato a1 = new Automato("C:\\Programations\\Exemplo\\Automatos Reconhecedores\\beg.txt");
+        Automato a2 = new Automato("C:\\Programations\\Exemplo\\Automatos Reconhecedores\\simbolos.txt");
         //Automato a2 = new Automato("C:\\Programations\\Exemplo\\Teste 4.txt");
         //Automato a1 = new Automato("/home/luz/Dropbox/workspace/formais-e-compiladores/src/tests/TESTEMINIMIZAR.txt");
         
@@ -37,11 +38,26 @@ public class Main {
         //a1.print();
         //a2.print();
         
-        //a1.print();
+        a1.print();
         
-        Automato a3 = OperacoesComAutomatos.MinimizarAutomato(a1);
+        a1 = OperacoesComAutomatos.criarAutomatoTotal(a1);
+        a2 = OperacoesComAutomatos.criarAutomatoTotal(a2);
+        
+        a1.print();
+        a2.print();
+        
+        Automato[] automatos = new Automato[2];
+        automatos[0] = a1;
+        automatos[1] = a2;
+        Automato a3 = OperacoesComAutomatos.UniaoDeAutomatos(automatos);
+        Determinizador.Determinizar(a3);
+        a3.print();
+        
+        OperacoesComAutomatos.analiseLexica(a3,"C:\\Programations\\Exemplo\\Testes p2\\Programa.txt");
         System.out.println(OperacoesComAutomatos.percorrerAutomato(a1, "abab"));
+        System.out.println(OperacoesComAutomatos.percorrerAutomato(a2, "abab"));
         System.out.println(OperacoesComAutomatos.percorrerAutomato(a3, "abab"));
+        //System.out.println(OperacoesComAutomatos.percorrerAutomato(a4, "abab"));
         //System.out.println(OperacoesComAutomatos.analiseLexica(a1, "/home/luz/Dropbox/workspace/formais-e-compiladores/src/tests/Programa.txt"));
         
         /*
