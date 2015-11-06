@@ -227,8 +227,18 @@ public class OperacoesComAutomatos {
             }
         }
 
-        ArrayList<Estado> EstadosNovos = new ArrayList();
-
+        ArrayList<Estado> estadosNovos = new ArrayList();
+       // ArrayList<Estado> grupo;
+        //for(int i = 0; i < grupos.size(); i ++) {
+          //  grupos.get(i).get(i).
+            
+            
+       // }
+        
+        for (ArrayList<Estado> a : grupos) {
+            for (Estado e : a) {
+                  
+            }
         //só falta criar os estados, e ver as transicoes... 
         return grupos;
     }
