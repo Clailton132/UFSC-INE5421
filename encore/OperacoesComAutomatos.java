@@ -266,7 +266,9 @@ public class OperacoesComAutomatos {
                 Estado est = tempEstado.getTransicaoPorIndice(j).get(0); //Já que está determinizado pode pegar só o primeiro, só vai ter um estado
                 for (int k = 0; k < grupos.size(); k++) {
                     if (grupos.get(k).indexOf(est) != -1) {
-                        estadoParaTransicao = grupos.get(k).indexOf(est);//Indice de qual estado é a transição
+                        //System.out.println(k);
+                        estadoParaTransicao = k;
+                        //estadoParaTransicao = grupos.get(k).indexOf(est);//Indice de qual estado é a transição
                         break;
                     }
                 }
