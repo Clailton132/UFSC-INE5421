@@ -17,9 +17,9 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-       // Automato a1 = new Automato("C:\\Programations\\Exemplo\\Teste 5.txt");
+        Automato a1 = new Automato("C:\\Programations\\Exemplo\\Teste 5.txt");
         //Automato a2 = new Automato("C:\\Programations\\Exemplo\\Teste 4.txt");
-        Automato a1 = new Automato("/home/luz/Dropbox/workspace/formais-e-compiladores/src/tests/TESTEMINIMIZAR.txt");
+        //Automato a1 = new Automato("/home/luz/Dropbox/workspace/formais-e-compiladores/src/tests/TESTEMINIMIZAR.txt");
         
         //Determinizador.Determinizar(a1);
         /*
@@ -39,8 +39,9 @@ public class Main {
         
         //a1.print();
         
-        ArrayList <ArrayList> a3 = OperacoesComAutomatos.MinimizarAutomato(a1);
-        //System.out.println(OperacoesComAutomatos.percorrerAutomato(a1, "abab"));
+        Automato a3 = OperacoesComAutomatos.MinimizarAutomato(a1);
+        System.out.println(OperacoesComAutomatos.percorrerAutomato(a1, "abab"));
+        System.out.println(OperacoesComAutomatos.percorrerAutomato(a3, "abab"));
         //System.out.println(OperacoesComAutomatos.analiseLexica(a1, "/home/luz/Dropbox/workspace/formais-e-compiladores/src/tests/Programa.txt"));
         
         /*
