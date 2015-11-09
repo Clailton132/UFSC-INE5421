@@ -107,29 +107,33 @@ public class OperacoesComAutomatos {
         return alcancaveis;
 
     }
-
-    
-    public static void ResolucaoDeProblema(Automato unido){
-        Estado a = unido.getEstadoInicial();
-        
-        String novo = "";
-        Estado Novo = new Estado(unido,"q0",unido.getAlfabeto().length);
-        
-        for(Estado e : a.getTransicaoPorIndice(0)){
-            
-                        
-        }
-        
-        
-
-        
-    }
     
     //boas praticas...: um mÃ©todo nÃ£o deve alterar diretamente as entradas, deve retornar algo para ser utilizado depois
     public static Automato criarAutomatoTotal(Automato automato) {
         //Em um automato total, todos os estados possuem transicoes com todos os sÃ­mbolos
         Automato temp = automato;
         Estado D = new Estado(temp, "q" + temp.getEstados().size(), temp.getAlfabeto().length);
+        for (Estado e : temp.getEstados()) {
+            for (int i = 1; i < e.getTransicoes().length; i++) {
+                if (e.getTransicaoPorIndice(i).size() == 0) {
+                    e.addTransicaoPorIndice(D, i);
+                }
+            }
+        }
+        for (String s : temp.getAlfabeto()) {
+            if (!s.equals("E")) {
+                D.addTransicaoPorAlfa(D, s);
+            }
+        }
+        temp.addEstados(D);
+
+        return temp;
+    }
+    
+        public static Automato criarEstadoRejeitado(Automato automato) {
+        //Em um automato total, todos os estados possuem transicoes com todos os sÃ­mbolos
+        Automato temp = automato;
+        Estado D = new Estado(temp, "qR", temp.getAlfabeto().length);
         D.setFinal(true);
         for (Estado e : temp.getEstados()) {
             for (int i = 1; i < e.getTransicoes().length; i++) {
@@ -180,6 +184,8 @@ public class OperacoesComAutomatos {
         //depois cria os grupos novos, baseado nas duplas novas
         while (grupos.size() != lastSize) {
 
+            lastSize = grupos.size();
+            
             ArrayList<ArrayList> novosGrupos = new ArrayList();
 
             HashMap map = new HashMap<Estado, Integer>();
@@ -194,14 +200,6 @@ public class OperacoesComAutomatos {
                         }
                     }
 
-                    /*
-                     for (Object o : map.keySet()) {
-                     Estado e = (Estado) o;
-                     System.out.println(e.getNome() + " " + map.get(e));
-                     }
-                     //*/
-                    //para cada grupo checar e comparar o primeiro elemento como resto, no maximo uma divisao por grupo.
-                    //adicionando tudo que for diferente do primeiro ao segundo grupo, o resto mantem.
                     for (int i = 0; i < grupos.size(); i++) {
 
                         ArrayList<Estado> a = grupos.get(i);
@@ -225,25 +223,11 @@ public class OperacoesComAutomatos {
                         }
 
                     }
-
-                    lastSize = grupos.size();
                     grupos.clear();
                     grupos.addAll(novosGrupos);
                     novosGrupos.clear();
 
-                    /*
-                    
-                     System.out.println("-");
-                     for (ArrayList<Estado> a : grupos) {
-                     for (Estado e : a) {
-                     System.out.println(grupos.indexOf(a) + " " + e.getNome());
-                     }
-                     }
-                     System.out.println(simbolo + " " + grupos.size() + " " + lastSize);
-                     System.out.println();
-                     //*/
                 }
-
             }
         }
 
@@ -296,7 +280,7 @@ public class OperacoesComAutomatos {
         }
 
         newAutomatoMinimizado.setAlfabeto(automatoAlvo.getAlfabeto());
-        newAutomatoMinimizado.print();
+        //newAutomatoMinimizado.print();
         // System.out.println("AGORA");
         //OperacoesComAutomatos.analiseLexica(newAutomatoMinimizado, "/home/luz/Dropbox/workspace/formais-e-compiladores/src/tests/Programa.txt");
 
@@ -304,14 +288,6 @@ public class OperacoesComAutomatos {
 
     }
 
-    private static int indiceEstadoNoGrupo(ArrayList<Estado> grupo, Estado est) {
-        for (int i = 0; i < grupo.size(); i++) {
-            if (grupo.get(i).getNome().compareTo(est.getNome()) == 0) {
-                return i;
-            }
-        }
-        return -1;
-    }
 
     public static boolean percorrerAutomato(Automato af, String entrada) {
 
@@ -321,8 +297,16 @@ public class OperacoesComAutomatos {
         for (int i = 0; i < entrada.length(); i++) {
             charAtual = entrada.charAt(i);
             ArrayList<Estado> arrayDeEstado = estadoAtual.getTransicaoPorAlfa("" + charAtual);
+            if(arrayDeEstado.size() == 0){
+                return false;
+            }
             estadoAtual = arrayDeEstado.get(0);
+            if(estadoAtual.getNome().equals("qR")){
+                System.out.println("ERRO");
+                return false;
+            }
         }
+        
         return estadoAtual.getFinal();
     }
 
@@ -338,13 +322,12 @@ public class OperacoesComAutomatos {
                 String line = scanner.nextLine();
                 //System.out.println(line);
                 palavras = line.split(" ");
-                //System.out.println(palavraReservada[0]);
-                //System.out.println("Aceita ou nao " + OperacoesComAutomatos.percorrerAutomato(af, palavraReservada[0]));
 
                 for (int i = 0; i < palavras.length; i++) {
                     if (palavras[i] != "\n") {
                         if (palavras[i] != null && !OperacoesComAutomatos.percorrerAutomato(af, palavras[i])) {
-                            linesWProblem += (currentLine + ", ");
+                            System.out.println(palavras[i]);
+                            linesWProblem += (currentLine + ": " + i + ", ");
                             //System.out.println(linesWProblem);
                         }
                     }
@@ -360,7 +343,22 @@ public class OperacoesComAutomatos {
         return linesWProblem;
     }
 
-    //public static void RetirarEstadosInalcansaveis(Gramatica gramatica){
-    //Trabalho 3
-    //}
+    public static void ConsertoDeUnião(Automato automato){
+        Estado inicial = automato.getEstadoInicial();
+        ArrayList<Estado> transicoes = inicial.getTransicaoPorIndice(0);
+        
+        for(Estado e : transicoes){
+            for(int i = 1; i < e.getTransicoes().length-1; i++){
+                if(!e.getTransicaoPorIndice(i).equals(e.getTransicaoPorIndice(i+1))){
+                    inicial.addTransicaoPorIndice(e.getTransicaoPorIndice(i+1).get(0), i+1);
+                    while(i < e.getTransicoes().length - 2 && e.getTransicaoPorIndice(i+1).equals(e.getTransicaoPorIndice(i+2))){
+                        inicial.addTransicaoPorIndice(e.getTransicaoPorIndice(i+2).get(0), i+2);
+                        i++;
+                    }
+                    break;
+                }
+                
+            }
+        }        
+    }
 }
