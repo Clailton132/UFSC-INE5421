@@ -114,7 +114,7 @@ public class Automato {
                 }
                 //*
                 for (int i = 1; i < l.size(); i++) {
-                    System.out.print("," + l.get(i).getNome());
+                    System.out.print(";" + l.get(i).getNome());
                 }
                 //*/
                 System.out.println("");

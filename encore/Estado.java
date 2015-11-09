@@ -41,7 +41,7 @@ public class Estado implements Comparable{
             }
             this.transicoes[i].add(estado);
             /*MEU COMPILADOR NÃO ACEITA ESSA LINHA DE BAIXO, COMENTEI ELA*/
-            //this.transicoes[i].sort(null);
+            this.transicoes[i].sort(null);
         }
     }
 
@@ -50,7 +50,7 @@ public class Estado implements Comparable{
             if (!Determinizador.checaSeExisteNoArray(transicoes[indice], estado)) {
                 this.transicoes[indice].add(estado);
              /*MEU COMPILADOR NÃO ACEITA ESSA LINHA DE BAIXO, COMENTEI ELA*/
-              //  this.transicoes[indice].sort(null);
+                this.transicoes[indice].sort(null);
             }
         }
     }
