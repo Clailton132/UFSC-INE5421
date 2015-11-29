@@ -14,6 +14,7 @@ import java.util.*;
 public class Tokens {
     
     ArrayList<String[]> Tokens;
+    private boolean eFinal;
     
     public Tokens(){
         Tokens = new ArrayList();
@@ -22,6 +23,8 @@ public class Tokens {
     public void addToken(String Token, String ID){
         String[] j = {Token,ID};
         Tokens.add(j);
+        if (ID.compareTo("PR") == 0)
+            eFinal = true;
     }
     
     public String getToken(String Token){
@@ -39,6 +42,9 @@ public class Tokens {
     
     public ArrayList<String[]> getAll(){
         return Tokens;
+    }
+    public boolean eFinal() {
+        return eFinal;
     }
     
 }
