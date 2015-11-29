@@ -314,7 +314,7 @@ public class OperacoesComAutomatos {
                     atual = automato.getEstadoInicial();
                     antigo = atual;
 
-                } else if (atual.getAutomatoOriginal().GetID().equals("atr")) {
+                } else if (atual.getAutomatoOriginal().GetID().equals("STRING")) {
                     Token += c;
 
                 } else {
