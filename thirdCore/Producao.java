@@ -19,19 +19,19 @@ public class Producao {
     */
     
     
-    private ArrayList<Tokens> tokens;
+    private ArrayList<Token> tokens;
     
-    public Producao(ArrayList<Tokens> t) {
+    public Producao(ArrayList<Token> t) {
         tokens = t;
     }
     public Producao() {
         tokens = new ArrayList();
     }
-    public Tokens getCabeca() {
+    public Token getCabeca() {
         return tokens.get(0);
     }
-    public ArrayList<Tokens> getCorpo() {
-        ArrayList<Tokens> temp = tokens;
+    public ArrayList<Token> getCorpo() {
+        ArrayList<Token> temp = tokens;
         temp.remove(0);
         return temp;
     }
