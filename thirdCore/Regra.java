@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class Regra {
     
-    private String cabeca;
+    private String cabeca;  
     private ArrayList<Producao> producoes;
     
     public Regra(String head, ArrayList<Producao> prod) {
