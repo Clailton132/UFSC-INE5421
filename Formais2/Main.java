@@ -90,25 +90,25 @@ public class Main {
         //*/
         
         a1.SetID("PR");
-        a2.SetID("Simb");
+        a2.SetID("SIMB");
         a3.SetID("PR");
         a4.SetID("PR");
-        a5.SetID("Tipo");
+        a5.SetID("TIPO");
         a6.SetID("PR");
         a7.SetID("PR");
-        a8.SetID("Tipo");
-        a9.SetID("Com");
-        a10.SetID("str");
-        a11.SetID("Op");
+        a8.SetID("TIPO");
+        a9.SetID("COM");
+        a10.SetID("STRING");
+        a11.SetID("OP");
         a12.SetID("PR");
         a13.SetID("PR");
-        a14.SetID("Tipo");
+        a14.SetID("TIPO");
         a15.SetID("PR");
         a16.SetID("PR");
-        a17.SetID("Num");
-        a18.SetID("Op");
-        a19.SetID("Op");
-        a20.SetID("Op");
+        a17.SetID("NUM");
+        a18.SetID("OP");
+        a19.SetID("OP");
+        a20.SetID("OP");
         
         //a16.print();
         
