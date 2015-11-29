@@ -14,7 +14,7 @@ import java.util.*;
 public class Tokens {
     
     ArrayList<String[]> Tokens;
-    private boolean eFinal;
+    private boolean eFinal; 
     
     public Tokens(){
         Tokens = new ArrayList();

@@ -27,13 +27,16 @@ public class Producao {
     public Producao() {
         tokens = new ArrayList();
     }
+    /*
     public Token getCabeca() {
         return tokens.get(0);
     }
+    */
     public ArrayList<Token> getCorpo() {
-        ArrayList<Token> temp = tokens;
-        temp.remove(0);
-        return temp;
+        //ArrayList<Token> temp = tokens;
+        //temp.remove(0);
+        //return temp;
+        return tokens;
     }
     /*
     public Producao(String producao){

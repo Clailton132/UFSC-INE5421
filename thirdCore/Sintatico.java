@@ -15,7 +15,7 @@ import java.util.Stack;
  * @author gabluz
  */
 public class Sintatico {
-    private static HashMap<Character, HashMap<Character, Producao>> tabela;
+    private static HashMap<String, HashMap<String, Producao>> tabela;
     
     public static boolean analise(ArrayList<Token> tokens) {
         
@@ -53,7 +53,7 @@ public class Sintatico {
                     for (int i = producao.size() - 1; i > -1; i--) {
                         pilha.push(producao.get(i));
                     }
-                    pilha.push(prod.getCabeca());
+                    //pilha.push(prod.getCabeca());
                     saida.add(prod);
                 } else {
                     return false;
@@ -67,7 +67,7 @@ public class Sintatico {
         
     }
     
-    
+    /*
     public static boolean analiseLLONE(ArrayList<Tokens> tokens, Tokens allTokens) {
         //Stack semantic = new Stack();//SEMANTIC STACK e para arvore!
         
@@ -125,5 +125,6 @@ public class Sintatico {
         
         return true;
     }
+    */
     
 }
