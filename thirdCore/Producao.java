@@ -5,15 +5,37 @@
  */
 package thirdCore;
 
+import Formais2.Tokens;
+import java.util.ArrayList;
+
 /**
  *
  * @author Luca
  */
 public class Producao {
-    
+    /*
     private char Cabeca;
     private String Corpo;
+    */
     
+    
+    private ArrayList<Tokens> tokens;
+    
+    public Producao(ArrayList<Tokens> t) {
+        tokens = t;
+    }
+    public Producao() {
+        tokens = new ArrayList();
+    }
+    public Tokens getCabeca() {
+        return tokens.get(0);
+    }
+    public ArrayList<Tokens> getCorpo() {
+        ArrayList<Tokens> temp = tokens;
+        temp.remove(0);
+        return temp;
+    }
+    /*
     public Producao(String producao){
         Cabeca = producao.split("->")[0].charAt(0);
         Corpo = producao.split("->")[1];
@@ -38,6 +60,7 @@ public class Producao {
     public void setCorpo(String Corpo) {
         this.Corpo = Corpo;
     }
+    */
     
     
 }
