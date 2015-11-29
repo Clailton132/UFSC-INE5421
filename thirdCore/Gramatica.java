@@ -15,7 +15,7 @@ import java.util.Scanner;
 public class Gramatica {
 
     private ArrayList<Producao> producoes;
-
+/*
     public Gramatica(String texto) {
         producoes = new ArrayList();
 
@@ -30,8 +30,8 @@ public class Gramatica {
                 this.addProducao(t1[0] + "->" + t);
             }
         }
-    }
-
+    }*/
+/*
     public void addProducao(String producao) {
         producoes.add(new Producao(producao));
     }
@@ -52,4 +52,5 @@ public class Gramatica {
             System.out.println(p.getCabeca() + " -> " + p.getCorpo());
         }
     }
+    */
 }
