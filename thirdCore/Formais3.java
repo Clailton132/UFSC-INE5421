@@ -369,7 +369,7 @@ public class Formais3 {
          
          tabela.put("V", ps);
          
-        
+        System.out.println(Sintatico.analise(new ArrayList(), tabela));
         
         
         
