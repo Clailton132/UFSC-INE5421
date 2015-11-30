@@ -19,7 +19,7 @@ public class Token {
         token = new ArrayList();
         token.add(tk);
         token.add(ID);
-        if(ID.compareTo("PR") == 0 || ID.compareTo("ID") == 0|| ID.compareTo("NUM") == 0 || ID.compareTo("STRING") == 0 || ID.compareTo("OP") == 0 || ID.compareTo("SIMB") == 0) // ID, NUM, STRING PR Rservada
+        if(ID.compareTo("PR") == 0 || ID.compareTo("ID") == 0|| ID.compareTo("NUM") == 0 || ID.compareTo("STRING") == 0 || ID.compareTo("OP") == 0 || ID.compareTo("SIMB") == 0 || ID.compareTo("TIPO") == 0 ) // ID, NUM, STRING PR Rservada
             eFinal = true;
         else
             eFinal = false;  

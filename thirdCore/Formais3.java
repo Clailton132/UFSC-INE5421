@@ -235,8 +235,8 @@ public class Formais3 {
 
          p = new Producao(tokens);
         
-        ps.put("num", p);
-        ps.put("string", p);
+        ps.put("NUM", p);
+        ps.put("STRING", p);
         
         tabela.put("I", ps);
         
