@@ -5,7 +5,7 @@
 */
 package thirdCore;
 
-import Formais2.Tokens;
+import Formais2.TokensL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Stack;
@@ -19,7 +19,7 @@ public class Sintatico {
     
     
     /*Metodo para fazer uma conversão do formato utilizado para tokens do trabalho 2 para o trabalho 3*/
-    public static ArrayList<Token> tokensToToken(Tokens tokensOLD) {
+    public static ArrayList<Token> tokensToToken(TokensL tokensOLD) {
         
         ArrayList<String[]> listTokensOLD = tokensOLD.getAll();
         ArrayList<Token> newTokens = new ArrayList();

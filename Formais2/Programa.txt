@@ -1,5 +1,5 @@
 prg olamundo :
 var frase : str ;
-beg:
+go
 frase = "ola mundo" ;
 end ;
