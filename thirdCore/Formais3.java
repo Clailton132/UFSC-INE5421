@@ -369,7 +369,10 @@ public class Formais3 {
          
          tabela.put("V", ps);
          
-        System.out.println(Sintatico.analise(new ArrayList(), tabela));
+         
+        TreeNode<Token> arvoreGramatical = Sintatico.analise(new ArrayList(), tabela);
+         
+        //System.out.println(Sintatico.analise(new ArrayList(), tabela));
         
         
         

@@ -17,6 +17,8 @@ import java.util.Stack;
 public class Sintatico {
     private static HashMap<String, HashMap<String, Producao>> tabela;
     
+    
+    /*Metodo para fazer uma conversão do formato utilizado para tokens do trabalho 2 para o trabalho 3*/
     public static ArrayList<Token> tokensToToken(Tokens tokensOLD) {
         
         ArrayList<String[]> listTokensOLD = tokensOLD.getAll();
@@ -29,10 +31,13 @@ public class Sintatico {
         return newTokens;
     }
     
-    
-    public static boolean analise(ArrayList<Token> tokens, HashMap<String, HashMap<String, Producao>> tab) {
-        tabela = tab;
-        Stack pilha = new Stack();
+    /*AnaliseSintatic Preditiva Nao Recursiva
+    Parametros
+    Lista com os tokens feita pelo trabalho 2 e adaptada pelo metodo tokensToToken, tabela de produções feitas a mão e criadas no main de Formais 3
+    */
+    public static TreeNode<Token> analise(ArrayList<Token> tokens, HashMap<String, HashMap<String, Producao>> tab) {
+        
+        /*Teste, se tirar o ultimo ; ou qualquer outro elemento deste programa basico acusará erro sintatico*/
         Token teste = new Token("prg", "PR");
         tokens.add(teste);
         teste = new Token(null, "ID");
@@ -60,13 +65,12 @@ public class Sintatico {
         teste = new Token("end", "PR");
         tokens.add(teste);
         teste = new Token(";", "SIMB");
-        //tokens.add(teste);
-        //teste = new Token("prg", "PR");
+        tokens.add(teste);
         
         
         
-        
-        
+        tabela = tab;
+        Stack pilha = new Stack();
         Token t = new Token("$", "PR");
         tokens.add(t); //Adiciona $ no fim da entrada
         pilha.push(t);//Adiciona $ no fundo da pilha
@@ -82,58 +86,47 @@ public class Sintatico {
         Token entrada;
         
         ArrayList<Producao> saida = new ArrayList();
+        Token ultimoTopo = new Token(null, "PR");
         
         do {
-            System.out.println("LOOP AGAIN");
             topoPilha = (Token) pilha.peek();
-            System.out.println("TOPO " + topoPilha.getUsarNaGramatica() + " E " + topoPilha.eFinal());
             entrada = tokens.get(apontador);
-            System.out.println("Entrada Atual " + tokens.get(apontador).getUsarNaGramatica());
             if(topoPilha.eFinal()) {
-               // System.out.println("ENTROU AQUI");
                 X = topoPilha.getUsarNaGramatica();
-                
-                if(X.compareTo(entrada.getUsarNaGramatica()) == 0) {
-                    //System.out.println("ENTROU AQUI2");
-                    pilha.pop();
+                if(X.compareTo(entrada.getUsarNaGramatica()) == 0) { 
+                    ultimoTopo = (Token) pilha.pop();
                     apontador++;
                 } else {
-                    System.out.println("AQUI");
-                    return false;
+                    System.out.println("Expected '" + topoPilha.getToken() + "' After '" + ultimoTopo.getToken() + "'");
+                    return null;
                 }
             } else {
-                System.out.println("at least");
                 prod = tabela.get(topoPilha.getUsarNaGramatica()).get(entrada.getUsarNaGramatica());
                 if(prod != null) {
                     pilha.pop();
                     producao = prod.getCorpo();
-                    
                     if(prod.getCorpo().get(0).getUsarNaGramatica().compareTo("&") != 0) {
-                       System.out.println("NOVA PRODUCAO a seguir");
                         for (int i = producao.size() - 1; i > -1; i--) {
-                            pilha.push(producao.get(i));
-                            System.out.println(producao.get(i).getUsarNaGramatica());
-                            
+                            pilha.push(producao.get(i));  
                         }
-                        
                         saida.add(prod);
                     }
                 } else {
-                    return false;
+                    System.out.println("Erro. Missing Something between '" + ultimoTopo.getToken() + "' and '" + entrada.getUsarNaGramatica() +"'" );
+                    return null;
                 }
             }
             helpwhile = (Token) pilha.peek();
-            
         } while(helpwhile.getUsarNaGramatica().compareTo("$") != 0);
         
         
         
+        
+        System.out.println("Everything is OK");
         //Gerar arvore gramatical
         TreeNode<Token> tree = new TreeNode(new Token(null, "S"));
-        System.out.println(saida.size());
         Sintatico.doTree(tree, saida);
-        return true;
-        
+        return tree;
     }
     
     public static void doTree(TreeNode nodoatual, ArrayList<Producao> saida ) {
