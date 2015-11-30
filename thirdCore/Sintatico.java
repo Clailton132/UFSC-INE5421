@@ -66,6 +66,8 @@ public class Sintatico {
         tokens.add(teste);
         teste = new Token(";", "SIMB");
         tokens.add(teste);
+        //teste = new Token("end", "PR");
+        //tokens.add(teste);
         
         
         
@@ -118,6 +120,11 @@ public class Sintatico {
             }
             helpwhile = (Token) pilha.peek();
         } while(helpwhile.getUsarNaGramatica().compareTo("$") != 0);
+        
+        if(tokens.get(apontador).getUsarNaGramatica().compareTo("$") != 0) {
+            System.out.println("DEU TRETA");
+            return null;
+        }
         
         
         
