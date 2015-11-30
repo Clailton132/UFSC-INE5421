@@ -5,7 +5,7 @@
  */
 package thirdCore;
 
-import Formais2.Tokens;
+import Formais2.TokensL;
 import java.util.ArrayList;
 
 /**

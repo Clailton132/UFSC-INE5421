@@ -18,7 +18,7 @@ public class Analisador {
         
     }
     
-    public void Analise(String programa, Automato automato, Tokens tokens){
+    public void Analise(String programa, Automato automato, TokensL tokens){
         
         Scanner s = new Scanner(getClass().getResourceAsStream(programa));
         while(s.hasNext()){

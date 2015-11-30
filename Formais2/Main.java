@@ -149,7 +149,7 @@ public class Main {
         OperacoesComAutomatos.criarEstadoRejeitado(ar);
         //ar.print();
         
-        Tokens tokens = new Tokens();
+        TokensL tokens = new TokensL();
         Analisador n = new Analisador();
         n.Analise("Programa.txt", ar, tokens);
 

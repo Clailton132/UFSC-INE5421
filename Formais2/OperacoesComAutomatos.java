@@ -404,7 +404,7 @@ public class OperacoesComAutomatos {
         System.out.println(Token + " : " + atual.getAutomatoOriginal().GetID());
     }
 
-    public static void PercorrerFrase2(Automato automato, String frase, int linha, Tokens tokens) {
+    public static void PercorrerFrase2(Automato automato, String frase, int linha, TokensL tokens) {
 
         Estado atual = automato.getEstadoInicial();
         frase += ' ';
