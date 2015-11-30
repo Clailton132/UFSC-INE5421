@@ -14,7 +14,14 @@ import java.util.Scanner;
  */
 public class Gramatica {
 
-    private ArrayList<Producao> producoes;
+    private ArrayList<Regra> regras;
+    
+    public Gramatica(String texto) {
+        regras = new ArrayList();
+    }
+    public Gramatica(ArrayList<Regra> rules) {
+        regras = rules;
+    }
 /*
     public Gramatica(String texto) {
         producoes = new ArrayList();
