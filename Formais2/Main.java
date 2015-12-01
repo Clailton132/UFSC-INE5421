@@ -151,7 +151,13 @@ public class Main {
         
         TokensL tokens = new TokensL();
         Analisador n = new Analisador();
-        n.Analise("Programa.txt", ar, tokens);
+        //n.Analise("Programa.txt", ar, tokens);
+        
+        OperacoesComAutomatos.PercorrerFrase(ar, "prg oi var frase : int ; go hif ( frase > 9 ) { frase = \"ola mundo\" ; end ;", 1, tokens);
+        
+        for(String[] t : tokens.getAll()){
+            System.out.println(t[0] + " : " + t[1]);
+        }
 
         
     }
