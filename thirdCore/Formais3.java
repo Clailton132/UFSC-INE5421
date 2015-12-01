@@ -398,70 +398,21 @@ public class Formais3 {
         Automato a19 = new Automato("or.txt");
         Automato a20 = new Automato("not.txt");
 
-
-        
-        /*
-        a1 = OperacoesComAutomatos.criarAutomatoTotal(a1);
-        a2 = OperacoesComAutomatos.criarAutomatoTotal(a2);
-        a3 = OperacoesComAutomatos.criarAutomatoTotal(a3);
-        a4 = OperacoesComAutomatos.criarAutomatoTotal(a4);
-        a5 = OperacoesComAutomatos.criarAutomatoTotal(a5);
-        a6 = OperacoesComAutomatos.criarAutomatoTotal(a6);
-        a7 = OperacoesComAutomatos.criarAutomatoTotal(a7);
-        a8 = OperacoesComAutomatos.criarAutomatoTotal(a8);
-        a9 = OperacoesComAutomatos.criarAutomatoTotal(a9);
-        a10 = OperacoesComAutomatos.criarAutomatoTotal(a10);
-        a11 = OperacoesComAutomatos.criarAutomatoTotal(a11);
-        a12 = OperacoesComAutomatos.criarAutomatoTotal(a12);
-        a13 = OperacoesComAutomatos.criarAutomatoTotal(a13);
-        a14 = OperacoesComAutomatos.criarAutomatoTotal(a14);
-        a15 = OperacoesComAutomatos.criarAutomatoTotal(a15);
-        a16 = OperacoesComAutomatos.criarAutomatoTotal(a16);
-        a17 = OperacoesComAutomatos.criarAutomatoTotal(a17);
-        a18 = OperacoesComAutomatos.criarAutomatoTotal(a18);
-        a19 = OperacoesComAutomatos.criarAutomatoTotal(a19);
-        a20 = OperacoesComAutomatos.criarAutomatoTotal(a20);
-
-        
-        //a1.print();
-        
-        /*
-        a1 = OperacoesComAutomatos.MinimizarAutomato(a1);
-        a2 = OperacoesComAutomatos.MinimizarAutomato(a2);
-        a3 = OperacoesComAutomatos.MinimizarAutomato(a3);
-        a4 = OperacoesComAutomatos.MinimizarAutomato(a4);
-        a5 = OperacoesComAutomatos.MinimizarAutomato(a5);
-        a6 = OperacoesComAutomatos.MinimizarAutomato(a6);
-        a7 = OperacoesComAutomatos.MinimizarAutomato(a7);
-        a8 = OperacoesComAutomatos.MinimizarAutomato(a8);
-        a9 = OperacoesComAutomatos.MinimizarAutomato(a9);
-        a10 = OperacoesComAutomatos.MinimizarAutomato(a10);
-        a11 = OperacoesComAutomatos.MinimizarAutomato(a11);
-        a12 = OperacoesComAutomatos.MinimizarAutomato(a12);
-        a13 = OperacoesComAutomatos.MinimizarAutomato(a13);
-        a14 = OperacoesComAutomatos.MinimizarAutomato(a14);
-        a15 = OperacoesComAutomatos.MinimizarAutomato(a15);
-        a16 = OperacoesComAutomatos.MinimizarAutomato(a16);
-        a17 = OperacoesComAutomatos.MinimizarAutomato(a17);
-        a18 = OperacoesComAutomatos.MinimizarAutomato(a18);
-        a19 = OperacoesComAutomatos.MinimizarAutomato(a19);
-        a20 = OperacoesComAutomatos.MinimizarAutomato(a20);
-        //*/
         
         a1.SetID("PR");
         a2.SetID("SIMB");
         a3.SetID("PR");
         a4.SetID("PR");
-        a5.SetID("TYPE");
+        a5.SetID("TIPO");
         a6.SetID("PR");
         a7.SetID("PR");
-        a8.SetID("TYPE");
+        a8.SetID("TIPO");
         a9.SetID("COM");
         a10.SetID("STRING");
         a11.SetID("OP");
         a12.SetID("PR");
         a13.SetID("PR");
-        a14.SetID("TYPE");
+        a14.SetID("TIPO");
         a15.SetID("PR");
         a16.SetID("PR");
         a17.SetID("NUM");
@@ -469,7 +420,6 @@ public class Formais3 {
         a19.SetID("OP");
         a20.SetID("OP");
         
-        //a16.print();
         
       
         Automato[] automatos = new Automato[20];
@@ -496,26 +446,21 @@ public class Formais3 {
         Automato ar = OperacoesComAutomatos.UniaoD(automatos);
         ar = OperacoesComAutomatos.criarAutomatoTotal(ar);
         ar.SetID("HOLLY");
+
         
-        //Determinizador.Determinizar(ar);
-        //*/
-        //Automato Teste = new Automato("C:\\Programations\\Exemplo\\Testes p2\\Teste 1.txt");
-        
-        //Determinizador.Determinizar(Teste);
-        
-        //Teste.print();
         ar = new Automato(OperacoesComAutomatos.RetirarEstadosInalcancaveis(ar, ar.getEstadoInicial(), new ArrayList<Estado>()), ar.getAlfabeto());
         OperacoesComAutomatos.criarEstadoRejeitado(ar);
-        //ar.print();
         
         TokensL tokensL = new TokensL();
         Analisador n = new Analisador();
         n.Analise("Programa.txt", ar, tokensL);
          
          //
+        
+        ArrayList<Token> t = Sintatico.tokensToToken(tokensL);
+        
          
-         
-        TreeNode<Token> arvoreGramatical = Sintatico.analise(Sintatico.tokensToToken(tokensL), tabela);
+        TreeNode<Token> arvoreGramatical = Sintatico.analise(t, tabela);
          
         //System.out.println(Sintatico.analise(new ArrayList(), tabela));
         

@@ -38,6 +38,7 @@ public class Sintatico {
     public static TreeNode<Token> analise(ArrayList<Token> tokens, HashMap<String, HashMap<String, Producao>> tab) {
         
         /*Teste, se tirar o ultimo ; ou qualquer outro elemento deste programa basico acusará erro sintatico*/
+        /*
         Token teste = new Token("prg", "PR");
         tokens.add(teste);
         teste = new Token(null, "ID");
@@ -68,6 +69,13 @@ public class Sintatico {
         tokens.add(teste);
         //teste = new Token("end", "PR");
         //tokens.add(teste);
+                //*/
+        
+        System.out.println("analisador");
+        
+        for(Token t : tokens){
+            System.out.println(t.getToken() + " : " + t.getID());
+        }
         
         
         
@@ -93,6 +101,7 @@ public class Sintatico {
         do {
             topoPilha = (Token) pilha.peek();
             entrada = tokens.get(apontador);
+            System.out.println("Entrada : " + entrada.getToken() + " : " + entrada.getID());
             if(topoPilha.eFinal()) {
                 X = topoPilha.getUsarNaGramatica();
                 if(X.compareTo(entrada.getUsarNaGramatica()) == 0) { 
@@ -118,7 +127,15 @@ public class Sintatico {
                     return null;
                 }
             }
+            
+            System.out.println("Pilha:");
+            for(Object tuple : pilha){
+                Token at = (Token) tuple;
+                System.out.println(at.getToken() + " : " + at.getID());
+            }
+            
             helpwhile = (Token) pilha.peek();
+            //System.out.println("Helpwhile " + helpwhile.getToken() + " : " + helpwhile.getID());
         } while(helpwhile.getUsarNaGramatica().compareTo("$") != 0);
         
         if(tokens.get(apontador).getUsarNaGramatica().compareTo("$") != 0) {

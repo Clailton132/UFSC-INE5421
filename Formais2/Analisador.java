@@ -5,7 +5,7 @@
  */
 package Formais2;
 
-import static Formais2.OperacoesComAutomatos.PercorrerFrase2;
+import static Formais2.OperacoesComAutomatos.PercorrerFrase;
 import java.util.Scanner;
 
 /**
@@ -25,9 +25,11 @@ public class Analisador {
             
             int i = 0;
             
-            String frase = s.next();
+            String frase = s.nextLine();
             
-            PercorrerFrase2(automato, frase, i, tokens);
+            //System.out.println("Frase: " + frase);
+            
+            PercorrerFrase(automato, frase, i, tokens);
             
             i++;
         }

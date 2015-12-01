@@ -1,4 +1,4 @@
-prg olamundo :
+prg olamundo
 var frase : str ;
 go
 frase = "ola mundo" ;

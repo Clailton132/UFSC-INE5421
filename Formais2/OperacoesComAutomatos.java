@@ -293,7 +293,7 @@ public class OperacoesComAutomatos {
 
     }
 
-    public static void PercorrerFrase(Automato automato, String frase, int linha) {
+    public static void PercorrerFrase(Automato automato, String frase, int linha, TokensL tokens) {
 
         Estado antigo = automato.getEstadoInicial();
         Estado atual = automato.getEstadoInicial();
@@ -309,7 +309,8 @@ public class OperacoesComAutomatos {
             if (c == ' ') {
 
                 if (atual.getFinal()) {
-                    System.out.println("Espaço " + Token + " : " + atual.getAutomatoOriginal().GetID());
+                    //System.out.println("Espaço " + Token + " : " + atual.getAutomatoOriginal().GetID());
+                    tokens.addToken(Token,atual.getAutomatoOriginal().GetID());
                     Token = "";
                     atual = automato.getEstadoInicial();
                     antigo = atual;
@@ -318,7 +319,8 @@ public class OperacoesComAutomatos {
                     Token += c;
 
                 } else {
-                    System.out.println("ID " + Token + " : ID");
+                    //System.out.println("ID " + Token + " : ID");
+                    tokens.addToken(Token,"ID");
                     Token = "";
                     atual = automato.getEstadoInicial();
                     antigo = atual;
@@ -326,7 +328,8 @@ public class OperacoesComAutomatos {
 
             } else if (antigo.getFinal() && !atual.getFinal()) {
 
-                System.out.println("DIF " + Token + " : " + antigo.getAutomatoOriginal().GetID());
+                //System.out.println("DIF " + Token + " : " + antigo.getAutomatoOriginal().GetID());
+                tokens.addToken(Token,antigo.getAutomatoOriginal().GetID());
                 Token = "";
                 atual = automato.getEstadoInicial();
                 antigo = atual;
@@ -339,9 +342,11 @@ public class OperacoesComAutomatos {
 
         }
         if (atual.getFinal()) {
-            System.out.println("END " + Token + " : " + atual.getAutomatoOriginal().GetID());
+            //System.out.println("END " + Token + " : " + atual.getAutomatoOriginal().GetID());
+            tokens.addToken(Token,atual.getAutomatoOriginal().GetID());
         } else {
-            System.out.println("END " + Token + " : ID");
+            //System.out.println("END " + Token + " : ID");
+            tokens.addToken(Token,"ID");
         }
     }
 
