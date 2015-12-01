@@ -70,13 +70,13 @@ public class Sintatico {
         //teste = new Token("end", "PR");
         //tokens.add(teste);
                 //*/
-        
+        /*
         System.out.println("analisador");
         
         for(Token t : tokens){
             System.out.println(t.getToken() + " : " + t.getID());
         }
-        
+        //*/
         
         
         tabela = tab;
@@ -128,12 +128,13 @@ public class Sintatico {
                 }
             }
             
+            /*
             System.out.println("Pilha:");
             for(Object tuple : pilha){
                 Token at = (Token) tuple;
                 System.out.println(at.getToken() + " : " + at.getID());
             }
-            
+            //*/
             helpwhile = (Token) pilha.peek();
             //System.out.println("Helpwhile " + helpwhile.getToken() + " : " + helpwhile.getID());
         } while(helpwhile.getUsarNaGramatica().compareTo("$") != 0);
