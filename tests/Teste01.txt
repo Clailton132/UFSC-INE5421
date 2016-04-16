@@ -1,0 +1,4 @@
+S:aS|bA;
+A: aB|b;
+B: a|b
+L=(a,b)

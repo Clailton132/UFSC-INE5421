@@ -1,0 +1,7 @@
+a,b,c
+q0;q0;q1;qr
+q1;q1;q2;qr
+q2;q0;q0;q2
+qr;qr;qr;qr
+f:q1
+i:q0
